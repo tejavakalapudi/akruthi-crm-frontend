@@ -33,6 +33,9 @@ function App() {
       copyToClipboard(token);
       setJwt(true);
       setUser(userName === 'user' ? 'Admin' : 'User');
+      setTimeout(() => {
+        setJwt(false)
+      }, 5000);
     }).catch((e) => {
       console.log("Auth Failed", e)
     });
