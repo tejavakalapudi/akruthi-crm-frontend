@@ -5,15 +5,15 @@ import HomePage from '../containers/Home';
 import LoginPage from '../containers/Login';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
+import { Alert } from '../components';
 
 const AppRouter = ({ history }) => (
   <ConnectedRouter history={history}>
-    <>
-      <Switch>
-        <PrivateRoute path="/" component={HomePage} exact />
-        <PublicRoute path="/login" component={LoginPage} />
-      </Switch>
-    </>
+    <Alert/>
+    <Switch>
+      <PrivateRoute path="/" component={HomePage} exact />
+      <PublicRoute path="/login" component={LoginPage} />
+    </Switch>
   </ConnectedRouter>
 );
 

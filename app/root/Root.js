@@ -8,6 +8,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import AppRouter from '../routes/AppRouter';
 import configureStore, { history } from '../redux/store/configureStore';
 import getThemes from "../settings/themes";
+
 import "../styles/app.scss";
 
 const { store, persistor } = configureStore();

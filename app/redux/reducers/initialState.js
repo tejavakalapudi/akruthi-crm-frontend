@@ -6,5 +6,11 @@ export default {
     home: {
         id: "",
         count: 0
+    },
+    alert: {
+        open: false,
+        message: "",
+        type: "success",
+        data: []
     }
 };
