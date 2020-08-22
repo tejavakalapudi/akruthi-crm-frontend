@@ -1,28 +1,25 @@
 import * as types from '../../constants/actionTypes';
-import AuthService from '../../services/sampleService';
+import copyToClipboard from '../../utils/copyToClipboard';
+import firebaseAuth from "../../firebase";
 
-const setAuth = (isAuthorized) => ({
+const setAuth = (isAuthorized, user) => ({
     type: types.SET_AUTH,
-    isAuthorized
+    isAuthorized,
+    user
 });
 
-
 // example of a thunk using the redux-thunk middleware
-const initAuth = () => {
-    return (dispatch) => {
-        // thunks allow for pre-processing actions, calling apis, and dispatching multiple actions
-        // in this case at this point we could call a service that would persist the auth state
-        AuthService.postAuth({
-            "email": "eve.holt@reqres.in",
-            "password": "cityslicka"
-        }).then(
-            setTimeout(
-                () => { dispatch(setAuth(true)); },
-                2000
-            )
-        ).catch(e => { console.log("Auth failed with an error: ", e); });
-
-    };
-};
+const initAuth = userName => dispatch =>
+    firebaseAuth
+    .signInWithEmailAndPassword(`${userName}@example.com`, "secretPassword")
+        .then(async () => {
+            // TODO: Delete below copy logic later in the time
+            const token = await firebaseAuth.currentUser.getIdToken();
+            copyToClipboard(token);
+            dispatch(setAuth(true));
+        }).catch((e) => {
+            dispatch(setAuth(false));
+            console.log("Auth Failed", e);
+        });
 
 export default { initAuth };

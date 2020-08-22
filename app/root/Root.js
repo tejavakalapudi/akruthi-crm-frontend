@@ -29,7 +29,7 @@ const App = () => {
   };
 
   const renderSettings = () => (
-    <div>
+    <div style={{display: 'flex', justifyContent: 'flex-end', padding: '5px 0', position: 'absolute', width: '100%'}}>
       <FormControl>
         <Select
           labelId="demo-simple-select-label"
@@ -54,8 +54,8 @@ const App = () => {
     <ThemeProvider theme={getThemes(currentMode)}>
       <CssBaseline />
       <div className="App">
+        {renderSettings()}
         <header className="App-header">
-          {renderSettings()}
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               <AppRouter history={history} />

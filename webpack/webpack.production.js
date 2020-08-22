@@ -1,15 +1,15 @@
-import MiniCssExtractPlugin, { loader } from "mini-css-extract-plugin";
-import UglifyJsPlugin from "uglifyjs-webpack-plugin";
-import OptimizeCSSAssetsPlugin from "optimize-css-assets-webpack-plugin";
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const TerserWebpackPlugin = require("terser-webpack-plugin");
+const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 
-export default () => ({
+module.exports = () => ({
     devtool: "nosource-source-map",
     output: {
         filename: "production.js"
     },
     optimization: {
         minimizer: [
-            new UglifyJsPlugin({
+            new TerserWebpackPlugin({
                 cache: true,
                 parallel: true,
                 sourceMap: true // set to true if you want JS source maps for css
@@ -21,7 +21,7 @@ export default () => ({
         rules: [
             {
                 test: /\.sa?css$/,
-                use: [loader, "css-loader", "sass-loader"]
+                use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
             }
         ]
     },

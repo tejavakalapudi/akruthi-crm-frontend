@@ -1,6 +1,7 @@
 export default {
     auth: {
-        isAuthorized: false
+        isAuthorized: false,
+        user: {}
     },
     home: {
         id: "",
