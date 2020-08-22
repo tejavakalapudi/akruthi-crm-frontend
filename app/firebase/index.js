@@ -1,7 +1,7 @@
 import * as firebase from "firebase";
   
 // Your web app's Firebase configuration
-var firebaseConfig = {
+const firebaseConfig = {
     apiKey: "AIzaSyCyYTsDV6au8xJRB954qpy9w3_uGnT1mZw",
     authDomain: "akruthi-crm.firebaseapp.com",
     databaseURL: "https://akruthi-crm.firebaseio.com",
