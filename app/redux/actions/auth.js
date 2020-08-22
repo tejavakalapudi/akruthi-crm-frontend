@@ -1,7 +1,6 @@
 import * as types from '../../constants/actionTypes';
-import copyToClipboard from '../../utils/copyToClipboard';
 import firebaseAuth from "../../firebase";
-import AuthActions from './alert';
+import AlertActions from './alert';
 
 const setAuth = (isAuthorized, user) => ({
     type: types.SET_AUTH,
@@ -9,22 +8,38 @@ const setAuth = (isAuthorized, user) => ({
     user
 });
 
-// example of a thunk using the redux-thunk middleware
+const resetAuth = () => ({
+    type: types.RESET_AUTH
+});
+
+const persistAuth = user => dispatch => dispatch(setAuth(true, user));
+
+const forceLogout = () => (dispatch, getState) => {
+    const currentState = getState();
+    if (currentState.auth.isAuthorized) {
+        dispatch(AlertActions.setAlert({
+            message: "Session timed out! Please login again.",
+            type: "error"
+        }));
+        dispatch(resetAuth());
+    }
+};
+
+const logout = () => dispatch => firebaseAuth.signOut().then(() => {
+    dispatch(resetAuth());
+});
+
 const initAuth = userName => dispatch =>
     firebaseAuth
     .signInWithEmailAndPassword(`${userName}@example.com`, "secretPassword")
-        .then(async () => {
-            // TODO: Delete below copy logic later in the time
-            const token = await firebaseAuth.currentUser.getIdToken();
-            copyToClipboard(token);
-            dispatch(setAuth(true));
-            dispatch(AuthActions.setAlert({
-                message: "JWT copied to the clipboard!",
-                type: "success"
-            }));
-        }).catch((e) => {
+        .then(() => {
+            dispatch(persistAuth(firebaseAuth.currentUser));
+        }).catch(() => {
             dispatch(setAuth(false));
-            console.log("Auth Failed", e);
+            dispatch(AlertActions.setAlert({
+                message: "Authorization failed! Please try again.",
+                type: "error"
+            }));
         });
 
-export default { initAuth };
+export default { initAuth, logout, persistAuth, forceLogout };
