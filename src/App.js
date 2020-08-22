@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import "./App.css";
 import firebaseAuth from "./firebase";
 import { ThemeProvider } from "@material-ui/core/styles";
-import getThemes from "./darkMode/base";
+import getThemes from "./themes/base";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -85,9 +85,7 @@ function App() {
               </Button>
             </div>
             {isTokenGenerated && (
-              <div
-                style={{ color: "#009688", padding: "20px", fontSize: "18px" }}
-              >
+              <div style={{ color: "#009688", padding: "20px", fontSize: "18px" }}>
                 {`JWT generated for ${currentUser} and copied to clip board!`}
               </div>
             )}
