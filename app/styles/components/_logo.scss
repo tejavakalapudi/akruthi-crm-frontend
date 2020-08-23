@@ -1,0 +1,19 @@
+.logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 20px;
+
+    &__icon{
+        width: 40px;
+    }
+
+    &__text{
+        font-size: 25px !important;
+        margin: 10px !important;
+        font-family: 'Comfortaa' !important;
+        font-weight: bold !important;
+        letter-spacing: 1px !important;
+    }
+}

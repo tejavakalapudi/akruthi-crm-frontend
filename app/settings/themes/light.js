@@ -1,11 +1,11 @@
 const theme = {
     palette:{
         primary: {
-            main: '#556cd6',
-          },
-          secondary: {
-            main: '#cc4444',
-          },
+          main: '#8D6CA9',
+        },
+        secondary: {
+          main: '#26292C',
+        },
     }
-}
+};
 export default theme;

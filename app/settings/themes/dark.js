@@ -2,13 +2,13 @@ const theme = {
     palette:{
         type:'dark',
         primary:{
-            main: '#26292C',
+            main: '#8D6CA9',
             light: 'rgb(81, 91, 95)',
             dark: 'rgb(26, 35, 39)',
             contrastText: '#ffffff',
         },
         secondary:{
-            main: '#b39ddb'
+            main: '#26292C'
         }
 
     }
