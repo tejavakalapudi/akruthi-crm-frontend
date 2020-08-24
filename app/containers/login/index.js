@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { Grid } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { AuthActions } from '../../redux/actions';
 
 import { ReactHelmet } from '../../components';
@@ -25,6 +25,8 @@ export default props => {
   );
   const dispatch = useDispatch();
   const classes = useStyles();
+  const theme = useTheme();
+  const isDarkMode = theme.palette.type === 'dark';
 
   useEffect(() => {
       if (isAuthorized) {
@@ -47,7 +49,7 @@ export default props => {
             <Grid item xs={12} md={5} classes={{root: 'login-root__wrapper'}}>
           <LoginWrapper onEmailAuthClick={onEmailAuthClick} onGoogleAuthClick={onGoogleAuthClick}/>
             </Grid>
-            <Grid item xs={12} md={7} classes={{root: 'login-root__slides'}}/>
+            <Grid item xs={12} md={7} classes={{root: `login-root__slides ${isDarkMode ? 'dark' : ''}`}}/>
         </Grid>
     </div>
   );

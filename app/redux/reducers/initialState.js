@@ -10,7 +10,7 @@ export default {
     alert: {
         open: false,
         message: "",
-        type: "success",
+        type: "",
         data: []
     }
 };

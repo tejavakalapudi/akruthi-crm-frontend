@@ -1,3 +1,5 @@
+import variables from '../../styles/base/_settings.scss';
+
 const theme = {
     palette:{
         type:'dark',
@@ -9,8 +11,10 @@ const theme = {
         },
         secondary:{
             main: '#26292C'
-        }
-
+        },
+        background: {
+            default: variables.darkModeBG
+        },
     }
 };
 
