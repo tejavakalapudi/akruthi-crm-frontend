@@ -66,16 +66,14 @@ const App = () => {
   return (
     <ThemeProvider theme={getThemes(currentMode)}>
       <CssBaseline />
-      <div className="App">
         {renderSettings()}
-        <header className="App-header">
+        <div className="App">
           <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
               <AppRouter history={history} />
             </PersistGate>
           </Provider>
-        </header>
-      </div>
+        </div> 
     </ThemeProvider>
   );
 };

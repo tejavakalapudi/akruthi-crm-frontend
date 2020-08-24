@@ -1,5 +1,5 @@
 import * as types from '../../constants/actionTypes';
-import firebaseAuth from "../../firebase";
+import firebaseAuth, {googleAuthProvider} from "../../firebase";
 import AlertActions from './alert';
 
 const setAuth = (isAuthorized, user) => ({
@@ -29,12 +29,13 @@ const logout = () => dispatch => firebaseAuth.signOut().then(() => {
     dispatch(resetAuth());
 });
 
-const initAuth = userName => dispatch =>
+const initAuth = (email, pass) => dispatch =>
     firebaseAuth
-    .signInWithEmailAndPassword(`${userName}@example.com`, "secretPassword")
+    .signInWithEmailAndPassword(email, pass)
         .then(() => {
             dispatch(persistAuth(firebaseAuth.currentUser));
-        }).catch(() => {
+        })
+        .catch(() => {
             dispatch(setAuth(false));
             dispatch(AlertActions.setAlert({
                 message: "Authorization failed! Please try again.",
@@ -42,4 +43,18 @@ const initAuth = userName => dispatch =>
             }));
         });
 
-export default { initAuth, logout, persistAuth, forceLogout };
+const signInWithGoogle = () => dispatch => 
+    firebaseAuth
+    .signInWithPopup(googleAuthProvider)
+        .then(() => {
+            dispatch(persistAuth(firebaseAuth.currentUser));
+        })
+        .catch(() => {
+            dispatch(setAuth(false));
+            dispatch(AlertActions.setAlert({
+                message: "Authorization failed! Please try again.",
+                type: "error"
+            }));
+        });
+
+export default { initAuth, logout, persistAuth, forceLogout, signInWithGoogle };

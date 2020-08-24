@@ -35,7 +35,13 @@ module.exports = ({ mode } = { mode: "production" }) => {
                 {
                     test: /\.jpe?g|png$/,
                     exclude: /node_modules/,
-                    loader: ["url-loader", "file-loader"]
+                    use: [{
+                            loader: 'url-loader',
+                            options: { 
+                                limit: 8000, // Convert images < 8kb to base64 strings
+                                name: 'images/[hash]-[name].[ext]'
+                            } 
+                        }]
                 },
                 {
                     test: /\.(js|jsx)$/,

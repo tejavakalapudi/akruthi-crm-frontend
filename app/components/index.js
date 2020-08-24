@@ -1,5 +1,6 @@
-import Button from './Button';
+import GoogleSignInButton from './GoogleSignInButton';
 import Alert from './Alert';
 import ReactHelmet from './ReactHelmet';
+import Logo from './Logo';
 
-export { Button, Alert, ReactHelmet };
+export { GoogleSignInButton, Alert, ReactHelmet, Logo };

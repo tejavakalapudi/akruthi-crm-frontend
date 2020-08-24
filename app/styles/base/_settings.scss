@@ -2,6 +2,10 @@
 $danger-red: #dc3545;
 $off-white: #f7f7f7;
 $dark-grey: #333;
+$dark-mode-bg: #191a20;
+// #232324
+
+$light-mode-bg: #fafafa;
 
 // Font Size
 $font-size-large: 1.8rem;
@@ -11,3 +15,10 @@ $font-size-small: 1.4rem;
 $s-size: 1.2rem;
 $m-size: 1.6rem;
 $l-size: 3.2rem;
+
+
+// the :export directive is the magic sauce for webpack
+:export {
+  darkModeBG: $dark-mode-bg;
+  lightModeBG: $light-mode-bg;
+}
