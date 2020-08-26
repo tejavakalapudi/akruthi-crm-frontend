@@ -4,13 +4,13 @@ const theme = {
     palette:{
         type:'dark',
         primary:{
-            main: '#8D6CA9',
+            main: variables.darkModePrimary,
             light: 'rgb(81, 91, 95)',
             dark: 'rgb(26, 35, 39)',
             contrastText: '#ffffff',
         },
         secondary:{
-            main: '#26292C'
+            main: variables.darkModeSecondary
         },
         background: {
             default: variables.darkModeBG

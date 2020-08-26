@@ -1,0 +1,46 @@
+/* This fires as soon as the element enters the dorm */
+.listItem-enter,
+.listItem-appear {
+  /*We give the list the initial dimension of the list button*/
+    width: 50px !important;
+}
+/* This is where we can add the transition*/
+.listItem-enter-active,
+.listItem-appear-active {
+    width: 100px !important;
+    transition: all 200ms;
+}
+
+/* This fires as soon as the this.state.showList is false */
+.listItem-exit {
+    width: 100px !important;
+}
+/* fires as element leaves the DOM*/
+.listItem-exit-active {
+    width: 0px !important;
+    transition: width 200ms;
+}
+
+.drawer-list{
+    padding: 10px !important;
+    
+    .item{
+        border-radius: 15px; 
+        padding: 3px 1px;
+        margin-bottom: 10px;
+
+        .icon{
+            justify-content: center;
+            align-items: center;
+            height: 40px;
+        }
+
+        .text{
+            padding-right: 15px;
+            &.open{
+                min-width: 100px !important;
+            }
+        }
+    }
+
+}
