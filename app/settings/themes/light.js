@@ -1,10 +1,12 @@
+import variables from '../../styles/base/_settings.scss';
+
 const theme = {
     palette:{
         primary: {
-          main: '#8D6CA9',
+          main: variables.lightModePrimary,
         },
         secondary: {
-          main: '#26292C',
+          main: variables.lightModeSecondary,
         },
     }
 };

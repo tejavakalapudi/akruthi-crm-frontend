@@ -4,12 +4,10 @@
     border-radius: 0.3rem;
     padding: $l-size;
     text-align: center;
-    background-color: $dark-grey;
 
     &__title{
         font-weight: 500;
         font-size: $font-size-large;
-        color: $off-white;
         cursor: pointer;
         -webkit-user-select: none;
 
