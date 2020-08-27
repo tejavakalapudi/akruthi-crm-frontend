@@ -15,6 +15,10 @@ const theme = {
         background: {
             default: variables.darkModeBG
         },
+        actions: {
+            selected: variables.darkModePrimary,
+            selectedOpacity: 0.4
+        }
     }
 };
 

@@ -7,38 +7,74 @@
 /* This is where we can add the transition*/
 .listItem-enter-active,
 .listItem-appear-active {
-    width: 100px !important;
+    width: 120px !important;
     transition: all 200ms;
 }
 
 /* This fires as soon as the this.state.showList is false */
 .listItem-exit {
-    width: 100px !important;
+    width: 120px !important;
 }
 /* fires as element leaves the DOM*/
 .listItem-exit-active {
-    width: 0px !important;
+    width: 50px !important;
     transition: width 200ms;
 }
 
 .drawer-list{
     padding: 10px !important;
+
+    hr{
+        margin: 15px 0;
+    }
     
     .item{
         border-radius: 15px; 
         padding: 3px 1px;
         margin-bottom: 10px;
 
+        &._logo {
+            margin-top: 15px;
+            margin-bottom: 20px;
+
+            &:hover{
+                background-color: unset !important;
+                opacity: 0.9;
+            }
+
+            &:active{
+                opacity: 0.7;
+            }
+        }
+
         .icon{
             justify-content: center;
             align-items: center;
             height: 40px;
+
+            img{
+                width: 30px;
+            }
         }
 
         .text{
             padding-right: 15px;
+            white-space: nowrap;  
+            text-transform: capitalize;  
+            span{
+                font-weight: 500 !important;
+            }
+
             &.open{
-                min-width: 100px !important;
+                min-width: 120px !important;
+            }
+
+            &._logo{
+                span{
+                    font-family: 'Comfortaa' !important;
+                    font-size: 16px;
+                    font-weight: bold !important;
+                }
             }
         }
     }
