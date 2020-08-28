@@ -1,1 +1,1 @@
-export const SERVER_API = 'https://reqres.in/api';
+export const SERVER_API = 'https://akruthi-crm.appspot.com/api/v1/';

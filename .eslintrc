@@ -32,7 +32,16 @@
         "devDependencies": true
       }
     ],
-    "no-param-reassign": "warn"
+    "no-param-reassign": "warn",
+    "prettier/prettier": [
+      "error",
+      {
+        "trailingComma": "es5",
+        "singleQuote": true,
+        "printWidth": 120
+      }
+    ],
+    "camelcase": "off"
   },
   "globals": {
     "window": true,

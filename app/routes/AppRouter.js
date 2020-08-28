@@ -11,9 +11,7 @@ import PublicRoute from './PublicRoute';
 import { Alert, DrawableSideNav } from '../components';
 
 const AppRouter = ({ history }) => {
-  const isAuthorized = useSelector(
-    state => state.auth.isAuthorized
-  );
+  const isAuthorized = useSelector((state) => state.auth.isAuthorized);
 
   return (
     <ConnectedRouter history={history}>

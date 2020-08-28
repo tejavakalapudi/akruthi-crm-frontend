@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { hot } from "react-hot-loader";
+import React, { useState, useEffect } from 'react';
+import { hot } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { useTranslation } from 'react-i18next';
-import {  CssBaseline, Switch, FormControl, Select, MenuItem } from "@material-ui/core";
-import { ThemeProvider } from "@material-ui/core/styles";
+import { CssBaseline, Switch, FormControl, Select, MenuItem } from '@material-ui/core';
+import { ThemeProvider } from '@material-ui/core/styles';
 import AppRouter from '../routes/AppRouter';
 import configureStore, { history } from '../redux/store/configureStore';
-import getThemes from "../settings/themes";
-import firebaseAuth from "../firebase";
+import getThemes from '../settings/themes';
+import firebaseAuth from '../firebase';
 import { AuthActions } from '../redux/actions';
 
-import "../styles/app.scss";
+import '../styles/app.scss';
 
 const { store, persistor } = configureStore();
 
@@ -31,7 +31,7 @@ const App = () => {
   };
 
   useEffect(() => {
-    firebaseAuth.onIdTokenChanged(user => {
+    firebaseAuth.onIdTokenChanged((user) => {
       if (user) {
         store.dispatch(AuthActions.persistAuth(user));
         return;
@@ -40,9 +40,8 @@ const App = () => {
     });
   }, []);
 
-
   const renderSettings = () => (
-    <div style={{display: 'flex', justifyContent: 'flex-end', padding: '5px 0', position: 'absolute', width: '100%'}}>
+    <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '5px 0', position: 'absolute', width: '100%' }}>
       <FormControl>
         <Select
           labelId="demo-simple-select-label"
@@ -66,14 +65,14 @@ const App = () => {
   return (
     <ThemeProvider theme={getThemes(currentMode)}>
       <CssBaseline />
-        {renderSettings()}
-        <div className="App">
-          <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
-              <AppRouter history={history} />
-            </PersistGate>
-          </Provider>
-        </div> 
+      {renderSettings()}
+      <div className="App">
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <AppRouter history={history} />
+          </PersistGate>
+        </Provider>
+      </div>
     </ThemeProvider>
   );
 };

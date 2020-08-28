@@ -1,9 +1,18 @@
-import { createMuiTheme } from '@material-ui/core/styles'
+import { createMuiTheme } from '@material-ui/core/styles';
 import light from './light';
 import dark from './dark';
 
 const themes = { light, dark };
 
-const getThemes = (type) =>  createMuiTheme(themes[type]); 
+const getThemes = (type) => {
+  const themeByType = themes[type];
+  const theme = {
+    ...themeByType,
+    typography: {
+      fontFamily: "'Poppins', 'Robotto', serif",
+    },
+  };
+  return createMuiTheme(theme);
+};
 
 export default getThemes;

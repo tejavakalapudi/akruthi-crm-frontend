@@ -1,60 +1,67 @@
 import * as types from '../../constants/actionTypes';
-import firebaseAuth, {googleAuthProvider} from "../../firebase";
+import firebaseAuth, { googleAuthProvider } from '../../firebase';
 import AlertActions from './alert';
 
 const setAuth = (isAuthorized, user) => ({
-    type: types.SET_AUTH,
-    isAuthorized,
-    user
+  type: types.SET_AUTH,
+  isAuthorized,
+  user,
 });
 
 const resetAuth = () => ({
-    type: types.RESET_AUTH
+  type: types.RESET_AUTH,
 });
 
-const persistAuth = user => dispatch => dispatch(setAuth(true, user));
+const persistAuth = (user) => (dispatch) => dispatch(setAuth(true, user));
 
 const forceLogout = () => (dispatch, getState) => {
-    const currentState = getState();
-    if (currentState.auth.isAuthorized) {
-        dispatch(AlertActions.setAlert({
-            message: "Session timed out! Please login again.",
-            type: "error"
-        }));
-        dispatch(resetAuth());
-    }
+  const currentState = getState();
+  if (currentState.auth.isAuthorized) {
+    dispatch(
+      AlertActions.setAlert({
+        message: 'Session timed out! Please login again.',
+        type: 'error',
+      })
+    );
+    dispatch(resetAuth());
+  }
 };
 
-const logout = () => dispatch => firebaseAuth.signOut().then(() => {
+const logout = () => (dispatch) =>
+  firebaseAuth.signOut().then(() => {
     dispatch(resetAuth());
-});
+  });
 
-const initAuth = (email, pass) => dispatch =>
-    firebaseAuth
+const initAuth = (email, pass) => (dispatch) =>
+  firebaseAuth
     .signInWithEmailAndPassword(email, pass)
-        .then(() => {
-            dispatch(persistAuth(firebaseAuth.currentUser));
+    .then(() => {
+      dispatch(persistAuth(firebaseAuth.currentUser));
+    })
+    .catch(() => {
+      dispatch(setAuth(false));
+      dispatch(
+        AlertActions.setAlert({
+          message: 'Authorization failed! Please try again.',
+          type: 'error',
         })
-        .catch(() => {
-            dispatch(setAuth(false));
-            dispatch(AlertActions.setAlert({
-                message: "Authorization failed! Please try again.",
-                type: "error"
-            }));
-        });
+      );
+    });
 
-const signInWithGoogle = () => dispatch => 
-    firebaseAuth
+const signInWithGoogle = () => (dispatch) =>
+  firebaseAuth
     .signInWithPopup(googleAuthProvider)
-        .then(() => {
-            dispatch(persistAuth(firebaseAuth.currentUser));
+    .then(() => {
+      dispatch(persistAuth(firebaseAuth.currentUser));
+    })
+    .catch(() => {
+      dispatch(setAuth(false));
+      dispatch(
+        AlertActions.setAlert({
+          message: 'Authorization failed! Please try again.',
+          type: 'error',
         })
-        .catch(() => {
-            dispatch(setAuth(false));
-            dispatch(AlertActions.setAlert({
-                message: "Authorization failed! Please try again.",
-                type: "error"
-            }));
-        });
+      );
+    });
 
 export default { initAuth, logout, persistAuth, forceLogout, signInWithGoogle };
