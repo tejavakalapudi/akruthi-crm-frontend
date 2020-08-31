@@ -5,3 +5,5 @@ export const RESET_AUTH = 'RESET_AUTH';
 
 export const SET_ALERT = 'SET_ALERT';
 export const RESET_ALERT = 'RESET_ALERT';
+
+export const SET_LOADING = 'SET_LOADING';

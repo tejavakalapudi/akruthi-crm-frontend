@@ -62,7 +62,7 @@ const DrawableSideNav = () => {
         onMouseLeave={toggleDrawer}
       >
         <List classes={{ root: 'drawer-list' }}>
-          <ListItem button classes={{ root: 'item _logo' }} disableRipple disableTouchRipple>
+          <ListItem button classes={{ root: 'item _logo' }} disableRipple disableTouchRipple component={NavLink} to="/">
             <ListItemIcon classes={{ root: 'icon' }}>
               <img alt="akruthi-crm" src={LogoIcon} />
             </ListItemIcon>
