@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { NavLink, useLocation } from 'react-router-dom';
 
 import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider } from '@material-ui/core';
-import { DashboardOutlined, ApartmentOutlined, TimelineOutlined } from '@material-ui/icons';
+import { DashboardOutlined, ApartmentOutlined, TimelineOutlined, DnsOutlined } from '@material-ui/icons';
 import { CSSTransition } from 'react-transition-group';
 import LogoIcon from '../assets/akruthi-logo.png';
 
@@ -75,6 +75,11 @@ const DrawableSideNav = () => {
             title="dashboard"
             component={<DashboardOutlined color="inherit" />}
             selected={currentPath === 'dashboard' || currentPath === ''}
+          />
+          <ListItemWithCustomRipple
+            title="leads"
+            component={<DnsOutlined color="inherit" />}
+            selected={currentPath === 'leads'}
           />
           <ListItemWithCustomRipple
             title="ventures"

@@ -6,6 +6,7 @@ import LoadingComponent from '../components/Loading';
 import HomePage from '../containers/Home';
 import Ventures from '../containers/Ventures';
 import Analytics from '../containers/Analytics';
+import Leads from '../containers/Leads';
 import LoginPage from '../containers/login';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
@@ -24,6 +25,7 @@ const AppRouter = ({ history }) => {
         <PrivateRoute path="/" component={HomePage} exact />
         <PublicRoute path="/login" component={LoginPage} />
         <PrivateRoute path="/dashboard" component={HomePage} exact />
+        <PrivateRoute path="/leads" component={Leads} exact />
         <PrivateRoute path="/ventures" component={Ventures} exact />
         <PrivateRoute path="/analytics" component={Analytics} exact />
       </Switch>
