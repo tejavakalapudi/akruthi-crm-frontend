@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { hot } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -8,8 +8,8 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import AppRouter from '../routes/AppRouter';
 import configureStore, { history } from '../redux/store/configureStore';
 import getThemes from '../settings/themes';
-import firebaseAuth from '../firebase';
-import { AuthActions } from '../redux/actions';
+// import firebaseAuth from '../firebase';
+// import { AuthActions } from '../redux/actions';
 
 import '../styles/app.scss';
 
@@ -30,15 +30,15 @@ const App = () => {
     setMode(currentMode === 'dark' ? 'light' : 'dark');
   };
 
-  useEffect(() => {
-    firebaseAuth.onIdTokenChanged((user) => {
-      if (user) {
-        store.dispatch(AuthActions.persistAuth(user));
-        return;
-      }
-      store.dispatch(AuthActions.forceLogout());
-    });
-  }, []);
+  // useEffect(() => {
+  //   firebaseAuth.onIdTokenChanged((user) => {
+  //     if (user) {
+  //       store.dispatch(AuthActions.persistAuth(user));
+  //       return;
+  //     }
+  //     store.dispatch(AuthActions.forceLogout());
+  //   });
+  // }, []);
 
   const renderSettings = () => (
     <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '5px 0', position: 'absolute', width: '100%' }}>
