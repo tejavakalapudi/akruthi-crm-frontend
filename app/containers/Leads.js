@@ -6,13 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
-import IconButton from '@material-ui/core/IconButton';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import SearchIcon from '@material-ui/icons/Search';
-import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-// import Tabs from '@material-ui/core/Tabs';
-import { grey, red } from '@material-ui/core/colors';
 import { ReactHelmet } from '../components';
 
 const leads = [
@@ -89,7 +83,6 @@ const useStyles = makeStyles({
   },
   header: {
     backgroundColor: '#e1bee7',
-    // color: rgba(0, 0, 0, 0.54),
   },
 });
 function Leads() {
@@ -99,7 +92,7 @@ function Leads() {
 
   useEffect(() => {
     // await leadsService.getAllLeads();
-  },[])
+  }, []);
 
   const handleToggle = () => {
     if (checkedItems.length === itemIds.length) {
@@ -116,31 +109,9 @@ function Leads() {
     }
   };
   return (
-    // <div>
     <Paper className={classes.paper}>
-      {/* <Tabs
-        value={value}
-        onChange={handleChange}
-        indicatorColor="primary"
-        textColor="primary"
-        variant="fullWidth"
-        aria-label="full width tabs example"
-      > */}
       <ReactHelmet title="Dashboard" meta="Discover your leads" />
-      {/* <TextField
-        // style={{ padding: 10 }}
-        label="Filter sales orders"
-        variant="outlined"
-        InputProps={{
-          endAdornment: (
-            <InputAdornment style={{ padding: '10px' }}>
-              <IconButton>
-                <SearchIcon />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />{' '} */}
+
       <Table className={classes.table} size="small">
         <TableHead>
           <TableRow className={classes.header}>
@@ -184,17 +155,13 @@ function Leads() {
           ))}
         </TableBody>
       </Table>
-      {/* </Tabs> */}
     </Paper>
-    // </div>
   );
 }
 export default Leads;
 // https://dribbble.com/shots/6773387-Sales-orders-list?utm_source=Clipboard_Shot&utm_campaign=antonyefimenko&utm_content=Sales%20orders%20list&utm_medium=Social_Share
 // https://dribbble.com/shots/5465599-Order-Management?utm_source=Clipboard_Shot&utm_campaign=tsibulski&utm_content=Order%20Management&utm_medium=Social_Share
 // https://dribbble.com/shots/7227376-Accounts-List-View?utm_source=Clipboard_Shot&utm_campaign=Ashmita&utm_content=Accounts%20List%20View&utm_medium=Social_Share
-
-
 
 // write services for leads
 // get all leads in useEffect of Leads.js
