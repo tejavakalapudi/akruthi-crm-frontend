@@ -9,7 +9,7 @@ axios.interceptors.request.use(
       ...config,
       headers: {
         Authorization: `Bearer ${jwtToken}`,
-        'x-client-id': 'akruthi',
+        'x-client-id': 'seed',
       },
     };
   },
@@ -19,6 +19,6 @@ axios.interceptors.request.use(
 );
 
 export default {
-  postAuth: (payload) => axios.post(`${SERVER_API}/auth`, payload),
+  postAuth: () => axios.post(`${SERVER_API}/auth`),
   getVentures: () => axios.get(`${SERVER_API}/ventures`),
 };

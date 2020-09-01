@@ -16,4 +16,5 @@ export default {
   appState: {
     isBusy: false,
   },
+  leads: [],
 };
