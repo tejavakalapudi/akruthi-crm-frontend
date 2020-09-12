@@ -1,5 +1,5 @@
 import AuthActions from './auth';
-import HomeActions from './home';
 import AlertActions from './alert';
+import LeadsActions from './leads';
 
-export { AuthActions, AlertActions, HomeActions };
+export { AuthActions, AlertActions, LeadsActions };

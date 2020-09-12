@@ -3,6 +3,7 @@ export default {
     isAuthorized: false,
     user: {},
   },
+  leads: [],
   home: {
     id: '',
     count: 0,

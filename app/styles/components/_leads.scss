@@ -1,0 +1,27 @@
+.chip {
+  height: 25px !important;
+  font-weight: bold;
+  width: 100px;
+
+  &.booked {
+    background-color: #d4edda;
+    color: #1f5d2c;
+  }
+
+  &.registered {
+    background-color: #aadcf3;
+    color: #236f92;
+  }
+  &.lead_generated {
+    background-color: #cbeaee;
+    color: #45d6e9;
+  }
+  &.visited_onsite {
+    background-color: #f0c7e0;
+    color: #dd52a8;
+  }
+  &.visit_scheduled {
+    background-color: #f0e6c7;
+    color: #ebc450;
+  }
+}
