@@ -4,14 +4,18 @@ import { SERVER_API } from '../constants/apis';
 
 axios.interceptors.request.use(
   async (config) => {
-    const jwtToken = await firebaseAuth.currentUser.getIdToken();
-    return {
-      ...config,
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-        'x-client-id': 'seed',
-      },
-    };
+    try {
+      const jwtToken = await firebaseAuth.currentUser.getIdToken();
+      return {
+        ...config,
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+          'x-client-id': 'seed',
+        },
+      };
+    } catch (error) {
+      return console.log('-------', error);
+    }
   },
   (error) => {
     return Promise.reject(error);

@@ -3,6 +3,7 @@ export default {
     isAuthorized: false,
     user: {},
   },
+  leads: [],
   home: {
     id: '',
     count: 0,
@@ -16,5 +17,4 @@ export default {
   appState: {
     isBusy: false,
   },
-  leads: [],
 };
