@@ -9,6 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
+
 // import leadsService from '../services/leadsService';
 import Chip from '@material-ui/core/Chip';
 // import Popover from '@material-ui/core/Popover';
@@ -90,6 +91,7 @@ const useStyles = makeStyles((theme) => ({
   },
   header: {},
   headerCell: {
+    textTransform: 'capitalize',
     // maxWidth: 1000,
     // color: '#e1bee7',
   },
@@ -130,12 +132,14 @@ function Leads() {
   };
 
   const capitalizeStatus = (status) => {
-    const result = status[0].toUpperCase() + status.slice(1);
-    if (status.includes('_')) {
-      const result2 = status.replace('_', ' ').toUpperCase() + status.slice(1);
-      return result2;
+    const arr = status.split(/\s|_/);
+    for (let i = 0, l = arr.length; i < l; i++) {
+      arr[i] =
+        arr[i].substr(0, 1).toUpperCase() +
+        (arr[i].length > 1 ? arr[i].substr(1).toLowerCase() : ' ') +
+        (arr[i].substr(1).length > 1 ? ' ' : ' ');
     }
-    return result;
+    return arr;
   };
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -193,8 +197,18 @@ function Leads() {
                   classes={{ root: 'chip' }}
                   className={row.status}
                   onClick={handleClick}
+                  SelectProps={{
+                    native: true,
+                  }}
                 />
-                <PopOver statusList={statusList} open={open} anchorEl={anchorEl} onClose={handleClose} />
+
+                <PopOver
+                  capitalizeStatus={capitalizeStatus}
+                  statusList={statusList}
+                  open={open}
+                  anchorEl={anchorEl}
+                  onClose={handleClose}
+                />
               </TableCell>
               <TableCell>{row.employee_assigned.name}</TableCell>
               <TableCell>{`${row.followup_required}`}</TableCell>

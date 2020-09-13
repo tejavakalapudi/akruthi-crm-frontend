@@ -25,3 +25,21 @@
     color: #ebc450;
   }
 }
+.statusList {
+  &.booked {
+    color: #1f5d2c;
+  }
+
+  &.registered {
+    color: #236f92;
+  }
+  &.lead_generated {
+    color: #45d6e9;
+  }
+  &.visited_onsite {
+    color: #dd52a8;
+  }
+  &.visit_scheduled {
+    color: #ebc450;
+  }
+}
