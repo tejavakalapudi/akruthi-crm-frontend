@@ -2,6 +2,7 @@
   height: 25px !important;
   font-weight: bold;
   width: 100px;
+  text-transform: capitalize;
 
   &.booked {
     background-color: #d4edda;
@@ -25,6 +26,7 @@
     color: #ebc450;
   }
 }
+
 .statusList {
   &.booked {
     color: #1f5d2c;
