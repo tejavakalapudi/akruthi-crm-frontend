@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
@@ -7,17 +8,20 @@ import FiberManualRecordOutlinedIcon from '@material-ui/icons/FiberManualRecordO
 const useStyles = makeStyles((theme) => ({
   typography: {
     padding: theme.spacing(1),
+    alignItems: 'center',
+    display: 'flex',
+    textTransform: 'capitalize',
   },
 }));
-const popOver = (props) => {
-  const id = props.open ? 'simple-popover' : undefined;
+const PopOver = ({ open, anchorEl, onClose, statusList, formatStatusField }) => {
+  const id = open ? 'simple-popover' : undefined;
   const classes = useStyles();
   return (
     <Popover
       id={id}
-      open={props.open}
-      anchorEl={props.anchorEl}
-      onClose={props.onClose}
+      open={open}
+      anchorEl={anchorEl}
+      onClose={onClose}
       anchorOrigin={{
         vertical: 'bottom',
         horizontal: 'center',
@@ -29,17 +33,20 @@ const popOver = (props) => {
       boxShadow={0}
       anchorReference="anchorEl"
     >
-      {props.statusList.map((row) => {
-        return (
-          <>
-            <Typography className={classes.typography}>
-              <FiberManualRecordOutlinedIcon className={row} classes={{ root: 'statusList' }} fontSize="small" />
-              {props.capitalizeStatus(row)}
-            </Typography>
-          </>
-        );
-      })}
+      {statusList.map((row, index) => (
+        <div key={`status-${index}`}>
+          <Typography className={classes.typography}>
+            <FiberManualRecordOutlinedIcon
+              style={{ fontSize: '14px', marginRight: '10px' }}
+              className={row}
+              classes={{ root: 'statusList' }}
+              fontSize="small"
+            />
+            {formatStatusField(row)}
+          </Typography>
+        </div>
+      ))}
     </Popover>
   );
 };
-export default popOver;
+export default PopOver;
