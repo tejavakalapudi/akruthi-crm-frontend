@@ -13,7 +13,9 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'capitalize',
   },
 }));
-const PopOver = ({ open, anchorEl, onClose, statusList, formatStatusField }) => {
+const PopOver = ({ anchorEl, onClose, statusList, formatStatusField }) => {
+  const open = Boolean(anchorEl);
+
   const id = open ? 'simple-popover' : undefined;
   const classes = useStyles();
   return (
