@@ -1,8 +1,9 @@
 .chip {
   height: 25px !important;
   font-weight: bold;
-  width: 100px;
+  padding: 0 5px !important;
   text-transform: capitalize;
+  text-align: center;
 
   &.booked {
     background-color: #d4edda;

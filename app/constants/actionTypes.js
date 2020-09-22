@@ -12,3 +12,5 @@ export const SET_LEADS = 'SET_LEADS';
 export const UPDATE_LEADS = 'UPDATE_LEADS';
 export const DELETE_LEADS = 'DELETE_LEADS';
 export const GET_LEADS_BY_ID = 'GET_LEADS_BY_ID';
+
+export const SET_STATUSES = 'SET_STATUSES';

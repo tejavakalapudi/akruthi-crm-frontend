@@ -11,4 +11,11 @@ const getAllLeads = () => async (dispatch) => {
   return dispatch(setLeads(leadsFetched.data.data));
 };
 
-export default { getAllLeads };
+const bulkUploadLeads = (bulkCsv) => async () => {
+  const data = new FormData();
+  data.append('file', bulkCsv);
+  const leadsUploaded = await leadsService.bulkUploadLeads(data);
+  return leadsUploaded;
+};
+
+export default { getAllLeads, bulkUploadLeads };

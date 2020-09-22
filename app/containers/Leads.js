@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/no-array-index-key */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -38,12 +38,9 @@ function Leads() {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.leads);
-  const statusList = userData.map((item) => item.status);
-  const itemIds = userData.map((item) => item.id);
-
-  useEffect(() => {
-    dispatch(LeadsActions.getAllLeads());
-  }, []);
+  const statuses = useSelector((state) => state.statuses);
+  const statusList = statuses.map((status) => status.name);
+  const itemIds = userData.map((item) => item._id);
 
   const handleToggle = () => {
     if (checkedItems.length === itemIds.length) {
@@ -61,7 +58,7 @@ function Leads() {
     }
   };
 
-  const formatStatusField = (status) => status.split('_').join(' ');
+  const formatStatusField = (status) => status && status.split('_').join(' ');
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -114,8 +111,8 @@ function Leads() {
               <TableCell className={classes.headerCell}>Contact</TableCell>
               <TableCell className={classes.headerCell}>Venture</TableCell>
               <TableCell className={classes.headerCell}>Status</TableCell>
-              <TableCell className={classes.headerCell}>Employee Assigned</TableCell>
-              <TableCell className={classes.headerCell}>FollowUp Required</TableCell>
+              <TableCell className={classes.headerCell}>Assigned to</TableCell>
+              <TableCell className={classes.headerCell}>Follow up</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -123,31 +120,31 @@ function Leads() {
               <TableRow key={index}>
                 <TableCell component="th" scope="row">
                   <Checkbox
-                    key={row.id}
-                    checked={checkedItems.includes(row.id)}
+                    key={row._id}
+                    checked={checkedItems.includes(row._id)}
                     color="primary"
                     size="small"
                     onClick={() => {
-                      handleRowCheck(row.id);
+                      handleRowCheck(row._id);
                     }}
                   />
                 </TableCell>
                 <TableCell component="th">{row.customer_name}</TableCell>
                 <TableCell>{row.contact}</TableCell>
-                <TableCell>{`${row.venture.name}, ${row.flat_No}`}</TableCell>
+                <TableCell>{row.venture ? `${row.venture.name}, ${row.flat_No}` : ''}</TableCell>
                 <TableCell>
                   <Chip
                     label={formatStatusField(row.status)}
                     classes={{ root: 'chip' }}
                     className={row.status}
                     onClick={handleClick}
-                    SelectProps={{
+                    selectprops={{
                       native: true,
                     }}
                   />
                 </TableCell>
-                <TableCell>{row.employee_assigned.name}</TableCell>
-                <TableCell>{`${row.followup_required}`}</TableCell>
+                <TableCell>{row.employee_assigned ? row.employee_assigned.name : ''}</TableCell>
+                <TableCell>{row.followup_required ? `${row.followup_required}` : ''}</TableCell>
               </TableRow>
             ))}
           </TableBody>
