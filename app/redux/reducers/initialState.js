@@ -17,4 +17,5 @@ export default {
   appState: {
     isBusy: false,
   },
+  statuses: [],
 };

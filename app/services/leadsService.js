@@ -3,7 +3,11 @@ import { SERVER_API } from '../constants/apis';
 
 export default {
   createLead: () => axios.post(`${SERVER_API}/leads`),
-  getAllLeads: () => axios.get(`${SERVER_API}/leads`),
+  bulkUploadLeads: (csvFile) =>
+    axios.post(`${SERVER_API}/leads/bulk-upload`, csvFile, {
+      headers: { 'content-type': 'multipart/form-data' },
+    }),
+  getAllLeads: (limit = 10) => axios.get(`${SERVER_API}/leads?limit=${limit}`),
   getLeadById: () => axios.get(`${SERVER_API}/leads/:id`),
   updateLead: () => axios.put(`${SERVER_API}/leads/:id`),
   deleteLead: () => axios.delete(`${SERVER_API}/leads/:id`),

@@ -4,6 +4,7 @@ import authReducer from './auth';
 import alertReducer from './alert';
 import appStateReducer from './appState';
 import leadsReducer from './leads';
+import statusReducer from './statuses';
 
 const rootReducer = (history) =>
   combineReducers({
@@ -12,6 +13,7 @@ const rootReducer = (history) =>
     alert: alertReducer,
     appState: appStateReducer,
     leads: leadsReducer,
+    statuses: statusReducer,
   });
 
 export default rootReducer;
