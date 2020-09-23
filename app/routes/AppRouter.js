@@ -26,12 +26,7 @@ const AppRouter = ({ history }) => {
     axios.interceptors.request.use(
       async (config) => {
         try {
-          let jwtToken;
-          if (firebaseAuth.currentUser) {
-            jwtToken = await firebaseAuth.currentUser.getIdToken();
-          } else {
-            jwtToken = currentAuth.user.stsTokenManager.accessToken;
-          }
+          const jwtToken = await firebaseAuth.currentUser.getIdToken();
           return {
             ...config,
             headers: {
@@ -48,8 +43,12 @@ const AppRouter = ({ history }) => {
       }
     );
 
-    dispatch(StatusActions.getAllStatuses());
-    dispatch(LeadsActions.getAllLeads());
+    firebaseAuth.onAuthStateChanged((user) => {
+      if (user) {
+        dispatch(StatusActions.getAllStatuses());
+        dispatch(LeadsActions.getAllLeads());
+      }
+    });
   }, []);
 
   return (
@@ -57,14 +56,16 @@ const AppRouter = ({ history }) => {
       <Alert />
       {currentAuth.isAuthorized && <DrawableSideNav />}
       {isAppBusy && <LoadingComponent />}
-      <Switch>
-        <PrivateRoute path="/" component={HomePage} exact />
-        <PublicRoute path="/login" component={LoginPage} />
-        <PrivateRoute path="/dashboard" component={HomePage} exact />
-        <PrivateRoute path="/leads" component={Leads} exact />
-        <PrivateRoute path="/ventures" component={Ventures} exact />
-        <PrivateRoute path="/analytics" component={Analytics} exact />
-      </Switch>
+      <div style={{ minWidth: 1350, paddingLeft: 77 }}>
+        <Switch>
+          <PrivateRoute path="/" component={HomePage} exact />
+          <PublicRoute path="/login" component={LoginPage} />
+          <PrivateRoute path="/dashboard" component={HomePage} exact />
+          <PrivateRoute path="/leads" component={Leads} exact />
+          <PrivateRoute path="/ventures" component={Ventures} exact />
+          <PrivateRoute path="/analytics" component={Analytics} exact />
+        </Switch>
+      </div>
     </ConnectedRouter>
   );
 };

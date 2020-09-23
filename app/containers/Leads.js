@@ -17,12 +17,6 @@ import { ReactHelmet } from '../components';
 import PopOver from '../components/PopOver';
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    marginLeft: 77,
-  },
-  table: {
-    minWidth: 1100,
-  },
   header: {},
   headerCell: {
     textTransform: 'capitalize',
@@ -93,8 +87,8 @@ function Leads() {
           </Button>
         </label>
       </div>
-      <Paper className={classes.paper}>
-        <Table className={classes.table} size="small">
+      <Paper>
+        <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell component="th" className={classes.headerCell}>
