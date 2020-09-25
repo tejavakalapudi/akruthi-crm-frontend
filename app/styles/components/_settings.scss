@@ -1,0 +1,13 @@
+.settings-wrapper {
+  width: 250px;
+  height: 320px;
+  text-align: center;
+  padding: 20px;
+  .avatar {
+    margin: auto;
+  }
+  .name {
+    font-weight: bold;
+    margin: 15px 0;
+  }
+}

@@ -1,8 +1,8 @@
-body{
+body {
   margin: 0;
 }
 
-.App{
+.App {
   text-align: center;
   min-height: 100vh;
   height: 100vh;
@@ -11,4 +11,14 @@ body{
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
+}
+
+.routes-wrapper {
+  width: 100%;
+  height: 100%;
+
+  &.authorized {
+    padding-left: 117px;
+    padding-right: 40px;
+  }
 }
