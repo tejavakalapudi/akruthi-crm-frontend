@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/no-array-index-key */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -12,9 +12,11 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Paper from '@material-ui/core/Paper';
 import Chip from '@material-ui/core/Chip';
 import Button from '@material-ui/core/Button';
+import Pagination from '@material-ui/lab/Pagination';
 import { LeadsActions } from '../redux/actions';
 import { ReactHelmet } from '../components';
 import PopOver from '../components/PopOver';
+import leadsService from '../services/leadsService';
 
 const useStyles = makeStyles((theme) => ({
   header: {},
@@ -24,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
   typography: {
     padding: theme.spacing(2),
   },
+  pagination: {
+    float: 'right',
+  },
 }));
 
 function Leads() {
@@ -31,10 +36,24 @@ function Leads() {
   const [checkedItems, setChecked] = useState([]);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const dispatch = useDispatch();
-  const userData = useSelector((state) => state.leads);
+
+  // object destructuring
+  const { data: leadsData, pagination } = useSelector((state) => state.leads);
+  const [page, setPage] = React.useState(1);
+  const handlePageCountChange = (event, value) => {
+    setPage(value);
+    // alert(value);
+  };
+  // alert(pagination);
+  const [limit, setLimit] = React.useState(10);
+  const [result, setResult] = React.useState([]);
+  const totalPages = Math.ceil(pagination.totalItems / limit);
+  // debugger;
+  console.log('-----', pagination.totalItems);
+
   const statuses = useSelector((state) => state.statuses);
   const statusList = statuses.map((status) => status.name);
-  const itemIds = userData.map((item) => item._id);
+  const itemIds = leadsData.map((item) => item._id);
 
   const handleToggle = () => {
     if (checkedItems.length === itemIds.length) {
@@ -69,6 +88,14 @@ function Leads() {
       dispatch(LeadsActions.bulkUploadLeads(e.target.files[0]));
     }
   };
+  // useEffect(() => {
+  leadsService.getAllLeads(limit, page).then((response) => {
+    console.log(response.data);
+    // debugger;
+    // return response;
+    setResult(response.data.data);
+  });
+  // }, []);
 
   return (
     <div>
@@ -110,7 +137,8 @@ function Leads() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {userData.map((row, index) => (
+            {/* {leadsData.map((row, index) => ( */}
+            {result.map((row, index) => (
               <TableRow key={index}>
                 <TableCell component="th" scope="row">
                   <Checkbox
@@ -147,6 +175,14 @@ function Leads() {
             statusList={statusList}
             anchorEl={anchorEl}
             onClose={handleClose}
+          />
+          <Pagination
+            count={totalPages}
+            variant="outlined"
+            page={page}
+            onChange={handlePageCountChange}
+            color="primary"
+            className={classes.pagination}
           />
         </Table>
       </Paper>

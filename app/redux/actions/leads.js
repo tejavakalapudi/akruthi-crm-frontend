@@ -8,7 +8,8 @@ const setLeads = (payload) => ({
 
 const getAllLeads = () => async (dispatch) => {
   const leadsFetched = await leadsService.getAllLeads();
-  return dispatch(setLeads(leadsFetched.data.data));
+  console.log(leadsFetched);
+  return dispatch(setLeads(leadsFetched.data));
 };
 
 const bulkUploadLeads = (bulkCsv) => async () => {

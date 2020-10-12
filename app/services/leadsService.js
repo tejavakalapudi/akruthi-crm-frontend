@@ -7,7 +7,7 @@ export default {
     axios.post(`${SERVER_API}/leads/bulk-upload`, csvFile, {
       headers: { 'content-type': 'multipart/form-data' },
     }),
-  getAllLeads: (limit = 10) => axios.get(`${SERVER_API}/leads?limit=${limit}`),
+  getAllLeads: (limit, page) => axios.get(`${SERVER_API}/leads?limit=${limit}&page=${page}`),
   getLeadById: () => axios.get(`${SERVER_API}/leads/:id`),
   updateLead: () => axios.put(`${SERVER_API}/leads/:id`),
   deleteLead: () => axios.delete(`${SERVER_API}/leads/:id`),
