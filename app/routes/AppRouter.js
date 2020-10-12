@@ -17,9 +17,9 @@ import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 import { Alert, DrawableSideNav } from '../components';
 
-const AppRouter = ({ history }) => {
-  const currentAuth = useSelector((state) => state.auth);
+const AppRouter = ({ history, currentTheme, toggleTheme }) => {
   const isAppBusy = useSelector((state) => state.appState.isBusy);
+  const currentAuth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -54,9 +54,9 @@ const AppRouter = ({ history }) => {
   return (
     <ConnectedRouter history={history}>
       <Alert />
-      {currentAuth.isAuthorized && <DrawableSideNav />}
+      <DrawableSideNav currentTheme={currentTheme} toggleTheme={toggleTheme} />
       {isAppBusy && <LoadingComponent />}
-      <div style={{ minWidth: 1350, paddingLeft: 77 }}>
+      <div className={`routes-wrapper ${currentAuth.isAuthorized ? 'authorized' : ''}`}>
         <Switch>
           <PrivateRoute path="/" component={HomePage} exact />
           <PublicRoute path="/login" component={LoginPage} />

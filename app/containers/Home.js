@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { Button } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { AlertActions, AuthActions } from '../redux/actions';
+import { AlertActions } from '../redux/actions';
 import copyToClipboard from '../utils/copyToClipboard';
 import firebaseAuth from '../firebase';
 import { ReactHelmet } from '../components';
@@ -34,10 +34,6 @@ export default () => {
     );
   };
 
-  const logout = () => {
-    dispatch(AuthActions.logout());
-  };
-
   return (
     <div>
       <ReactHelmet title="Dashboard" meta="Discover your leads" />
@@ -45,9 +41,6 @@ export default () => {
       <div className={classes.root}>
         <Button onClick={copyJwt} variant="contained">
           Copy JWT
-        </Button>
-        <Button onClick={logout} variant="contained" color="secondary">
-          Logout
         </Button>
       </div>
     </div>

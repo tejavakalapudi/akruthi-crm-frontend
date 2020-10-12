@@ -32,7 +32,7 @@ const PopOver = ({ anchorEl, onClose, statusList, formatStatusField }) => {
         vertical: 'top',
         horizontal: 'center',
       }}
-      boxShadow={0}
+      boxshadow={0}
       anchorReference="anchorEl"
     >
       {statusList.map((row, index) => (
