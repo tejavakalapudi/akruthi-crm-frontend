@@ -2,7 +2,7 @@ import axios from 'axios';
 import { SERVER_API } from '../constants/apis';
 
 export default {
-  createLead: () => axios.post(`${SERVER_API}/leads`),
+  createLead: (payload) => axios.post(`${SERVER_API}/leads`, payload),
   bulkUploadLeads: (csvFile) =>
     axios.post(`${SERVER_API}/leads/bulk-upload`, csvFile, {
       headers: { 'content-type': 'multipart/form-data' },

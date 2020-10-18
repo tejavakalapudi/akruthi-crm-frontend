@@ -3,18 +3,11 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Checkbox from '@material-ui/core/Checkbox';
-import Paper from '@material-ui/core/Paper';
-import Chip from '@material-ui/core/Chip';
-import Button from '@material-ui/core/Button';
-import { LeadsActions } from '../redux/actions';
-import { ReactHelmet } from '../components';
-import PopOver from '../components/PopOver';
+import { Paper, Checkbox, TableRow, TableHead, TableCell, TableBody, Table, Button, Chip } from '@material-ui/core/';
+
+import { LeadsActions } from '../../redux/actions';
+import { ReactHelmet, PopOver } from '../../components';
+import CreateLead from './CreateLead';
 
 const useStyles = makeStyles((theme) => ({
   header: {},
@@ -29,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
 function Leads() {
   const classes = useStyles();
   const [checkedItems, setChecked] = useState([]);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isModalOpen, toggleModal] = useState(false);
   const dispatch = useDispatch();
   const userData = useSelector((state) => state.leads);
   const statuses = useSelector((state) => state.statuses);
@@ -70,10 +64,26 @@ function Leads() {
     }
   };
 
+  const handleModalToggle = () => {
+    toggleModal(!isModalOpen);
+  };
+
   return (
     <div>
       <ReactHelmet title="Dashboard" meta="Discover your leads" />
-      <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '10px 0' }}>
+      <div className="buttons-container">
+        <label>
+          <Button
+            variant="outlined"
+            color="primary"
+            component="span"
+            className="create__new"
+            onClick={handleModalToggle}
+          >
+            Create New
+          </Button>
+        </label>
+
         <input
           style={{ display: 'none' }}
           id="contained-button-file"
@@ -150,6 +160,7 @@ function Leads() {
           />
         </Table>
       </Paper>
+      <CreateLead open={isModalOpen} toggleModal={handleModalToggle} />
     </div>
   );
 }

@@ -18,4 +18,6 @@ export default {
     isBusy: false,
   },
   statuses: [],
+  ventures: [],
+  employees: [],
 };

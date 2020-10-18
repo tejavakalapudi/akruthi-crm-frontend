@@ -46,3 +46,26 @@
     color: #ebc450;
   }
 }
+
+.buttons-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 10px 0;
+
+  .create__new {
+    margin-right: 10px;
+  }
+}
+
+.lead-input {
+  width: 450px;
+  margin: 10px !important;
+
+  &.venture {
+    width: 350px;
+  }
+
+  &.flat {
+    width: 80px;
+  }
+}
