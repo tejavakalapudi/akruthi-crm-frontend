@@ -7,10 +7,10 @@ const setLeads = (payload) => ({
   payload,
 });
 
-const getAllLeads = () => async (dispatch) => {
-  const leadsFetched = await leadsService.getAllLeads();
+const getAllLeads = (page = 1, limit = 10) => async (dispatch) => {
+  const leadsFetched = await leadsService.getAllLeads(page, limit);
   dispatch(AppStateActions.setIsBusy(false));
-  return dispatch(setLeads(leadsFetched.data.data));
+  return dispatch(setLeads(leadsFetched.data));
 };
 
 const bulkUploadLeads = (bulkCsv) => async () => {

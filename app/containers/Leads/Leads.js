@@ -3,7 +3,8 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Checkbox, TableRow, TableHead, TableCell, TableBody, Table, Button, Chip } from '@material-ui/core/';
+import { Paper, Checkbox, TableRow, TableHead, TableCell, TableBody, Table, Button, Chip } from '@material-ui/core';
+import Pagination from '@material-ui/lab/Pagination';
 
 import { LeadsActions } from '../../redux/actions';
 import { ReactHelmet, PopOver } from '../../components';
@@ -17,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
   typography: {
     padding: theme.spacing(2),
   },
+  pagination: {
+    float: 'right',
+  },
 }));
 
 function Leads() {
@@ -24,11 +28,18 @@ function Leads() {
   const [checkedItems, setChecked] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [isModalOpen, toggleModal] = useState(false);
-  const dispatch = useDispatch();
-  const userData = useSelector((state) => state.leads);
+
+  const { data: leadsData, pagination } = useSelector((state) => state.leads);
+
   const statuses = useSelector((state) => state.statuses);
   const statusList = statuses.map((status) => status.name);
-  const itemIds = userData.map((item) => item._id);
+  const itemIds = leadsData.map((item) => item._id);
+
+  const dispatch = useDispatch();
+
+  const handlePageCountChange = (event, value) => {
+    dispatch(LeadsActions.getAllLeads(value));
+  };
 
   const handleToggle = () => {
     if (checkedItems.length === itemIds.length) {
@@ -120,7 +131,7 @@ function Leads() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {userData.map((row, index) => (
+            {leadsData.map((row, index) => (
               <TableRow key={index}>
                 <TableCell component="th" scope="row">
                   <Checkbox
@@ -159,6 +170,13 @@ function Leads() {
             onClose={handleClose}
           />
         </Table>
+        <Pagination
+          count={pagination.total}
+          variant="outlined"
+          onChange={handlePageCountChange}
+          color="primary"
+          className={classes.pagination}
+        />
       </Paper>
       <CreateLead open={isModalOpen} toggleModal={handleModalToggle} />
     </div>
