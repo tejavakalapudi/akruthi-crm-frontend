@@ -4,5 +4,6 @@ import ReactHelmet from './ReactHelmet';
 import Logo from './Logo';
 import DrawableSideNav from './DrawableSideNav';
 import Settings from './Settings';
+import PopOver from './PopOver';
 
-export { GoogleSignInButton, Alert, ReactHelmet, Logo, DrawableSideNav, Settings };
+export { GoogleSignInButton, Alert, ReactHelmet, Logo, DrawableSideNav, Settings, PopOver };

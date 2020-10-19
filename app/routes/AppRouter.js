@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { ConnectedRouter } from 'connected-react-router';
 
-import { LeadsActions, StatusActions } from '../redux/actions';
+import { LeadsActions, StatusActions, EmployeesActions, VenturesActions } from '../redux/actions';
 import firebaseAuth from '../firebase';
 
 import LoadingComponent from '../components/Loading';
@@ -19,7 +19,7 @@ import { Alert, DrawableSideNav } from '../components';
 
 const AppRouter = ({ history, currentTheme, toggleTheme }) => {
   const isAppBusy = useSelector((state) => state.appState.isBusy);
-  const currentAuth = useSelector((state) => state.auth);
+  // const currentAuth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -47,6 +47,8 @@ const AppRouter = ({ history, currentTheme, toggleTheme }) => {
       if (user) {
         dispatch(StatusActions.getAllStatuses());
         dispatch(LeadsActions.getAllLeads());
+        dispatch(EmployeesActions.getAllEmployees());
+        dispatch(VenturesActions.getAllVentures());
       }
     });
   }, []);
@@ -56,16 +58,14 @@ const AppRouter = ({ history, currentTheme, toggleTheme }) => {
       <Alert />
       <DrawableSideNav currentTheme={currentTheme} toggleTheme={toggleTheme} />
       {isAppBusy && <LoadingComponent />}
-      <div className={`routes-wrapper ${currentAuth.isAuthorized ? 'authorized' : ''}`}>
-        <Switch>
-          <PrivateRoute path="/" component={HomePage} exact />
-          <PublicRoute path="/login" component={LoginPage} />
-          <PrivateRoute path="/dashboard" component={HomePage} exact />
-          <PrivateRoute path="/leads" component={Leads} exact />
-          <PrivateRoute path="/ventures" component={Ventures} exact />
-          <PrivateRoute path="/analytics" component={Analytics} exact />
-        </Switch>
-      </div>
+      <Switch>
+        <PrivateRoute path="/" component={HomePage} exact />
+        <PublicRoute path="/login" component={LoginPage} />
+        <PrivateRoute path="/dashboard" component={HomePage} exact />
+        <PrivateRoute path="/leads" component={Leads} exact />
+        <PrivateRoute path="/ventures" component={Ventures} exact />
+        <PrivateRoute path="/analytics" component={Analytics} exact />
+      </Switch>
     </ConnectedRouter>
   );
 };

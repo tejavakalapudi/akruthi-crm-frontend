@@ -1,22 +1,14 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/no-array-index-key */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Checkbox from '@material-ui/core/Checkbox';
-import Paper from '@material-ui/core/Paper';
-import Chip from '@material-ui/core/Chip';
-import Button from '@material-ui/core/Button';
+import { Paper, Checkbox, TableRow, TableHead, TableCell, TableBody, Table, Button, Chip } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
-import { LeadsActions } from '../redux/actions';
-import { ReactHelmet } from '../components';
-import PopOver from '../components/PopOver';
-import leadsService from '../services/leadsService';
+
+import { LeadsActions } from '../../redux/actions';
+import { ReactHelmet, PopOver } from '../../components';
+import CreateLead from './CreateLead';
 
 const useStyles = makeStyles((theme) => ({
   header: {},
@@ -34,26 +26,20 @@ const useStyles = makeStyles((theme) => ({
 function Leads() {
   const classes = useStyles();
   const [checkedItems, setChecked] = useState([]);
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isModalOpen, toggleModal] = useState(false);
 
-  // object destructuring
   const { data: leadsData, pagination } = useSelector((state) => state.leads);
-  const [page, setPage] = React.useState(1);
-  const handlePageCountChange = (event, value) => {
-    setPage(value);
-    // alert(value);
-  };
-  // alert(pagination);
-  const [limit, setLimit] = React.useState(10);
-  const [result, setResult] = React.useState([]);
-  const totalPages = Math.ceil(pagination.totalItems / limit);
-  // debugger;
-  console.log('-----', pagination.totalItems);
 
   const statuses = useSelector((state) => state.statuses);
   const statusList = statuses.map((status) => status.name);
   const itemIds = leadsData.map((item) => item._id);
+
+  const dispatch = useDispatch();
+
+  const handlePageCountChange = (event, value) => {
+    dispatch(LeadsActions.getAllLeads(value));
+  };
 
   const handleToggle = () => {
     if (checkedItems.length === itemIds.length) {
@@ -88,19 +74,27 @@ function Leads() {
       dispatch(LeadsActions.bulkUploadLeads(e.target.files[0]));
     }
   };
-  // useEffect(() => {
-  leadsService.getAllLeads(limit, page).then((response) => {
-    console.log(response.data);
-    // debugger;
-    // return response;
-    setResult(response.data.data);
-  });
-  // }, []);
+
+  const handleModalToggle = () => {
+    toggleModal(!isModalOpen);
+  };
 
   return (
     <div>
       <ReactHelmet title="Dashboard" meta="Discover your leads" />
-      <div style={{ display: 'flex', justifyContent: 'flex-end', margin: '10px 0' }}>
+      <div className="buttons-container">
+        <label>
+          <Button
+            variant="outlined"
+            color="primary"
+            component="span"
+            className="create__new"
+            onClick={handleModalToggle}
+          >
+            Create New
+          </Button>
+        </label>
+
         <input
           style={{ display: 'none' }}
           id="contained-button-file"
@@ -137,8 +131,7 @@ function Leads() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {leadsData.map((row, index) => ( */}
-            {result.map((row, index) => (
+            {leadsData.map((row, index) => (
               <TableRow key={index}>
                 <TableCell component="th" scope="row">
                   <Checkbox
@@ -176,16 +169,16 @@ function Leads() {
             anchorEl={anchorEl}
             onClose={handleClose}
           />
-          <Pagination
-            count={totalPages}
-            variant="outlined"
-            page={page}
-            onChange={handlePageCountChange}
-            color="primary"
-            className={classes.pagination}
-          />
         </Table>
+        <Pagination
+          count={pagination.total}
+          variant="outlined"
+          onChange={handlePageCountChange}
+          color="primary"
+          className={classes.pagination}
+        />
       </Paper>
+      <CreateLead open={isModalOpen} toggleModal={handleModalToggle} />
     </div>
   );
 }

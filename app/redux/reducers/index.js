@@ -5,6 +5,8 @@ import alertReducer from './alert';
 import appStateReducer from './appState';
 import leadsReducer from './leads';
 import statusReducer from './statuses';
+import venturesReducer from './ventures';
+import employeesReducer from './employees';
 
 const rootReducer = (history) =>
   combineReducers({
@@ -14,6 +16,8 @@ const rootReducer = (history) =>
     appState: appStateReducer,
     leads: leadsReducer,
     statuses: statusReducer,
+    ventures: venturesReducer,
+    employees: employeesReducer,
   });
 
 export default rootReducer;
