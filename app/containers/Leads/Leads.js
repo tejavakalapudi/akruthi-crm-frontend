@@ -6,9 +6,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Paper, Checkbox, TableRow, TableHead, TableCell, TableBody, Table, Button, Chip } from '@material-ui/core';
 import Pagination from '@material-ui/lab/Pagination';
 
+import DeleteIcon from '@material-ui/icons/Delete';
 import { LeadsActions } from '../../redux/actions';
 import { ReactHelmet, PopOver } from '../../components';
 import CreateLead from './CreateLead';
+// import alert from '../../redux/actions/alert';
 
 const useStyles = makeStyles((theme) => ({
   header: {},
@@ -19,7 +21,8 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(2),
   },
   pagination: {
-    float: 'right',
+    padding: '10px 0',
+    margin: '0 34%',
   },
 }));
 
@@ -78,7 +81,11 @@ function Leads() {
   const handleModalToggle = () => {
     toggleModal(!isModalOpen);
   };
-
+  const handleDelete = (event, id) => {
+    // console.log(`leads id ${id}`);
+    // alert('Are you sure, do you want to delete the lead!');
+    dispatch(LeadsActions.deleteLead(id));
+  };
   return (
     <div>
       <ReactHelmet title="Dashboard" meta="Discover your leads" />
@@ -128,6 +135,7 @@ function Leads() {
               <TableCell className={classes.headerCell}>Status</TableCell>
               <TableCell className={classes.headerCell}>Assigned to</TableCell>
               <TableCell className={classes.headerCell}>Follow up</TableCell>
+              <TableCell className={classes.headerCell}>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -160,6 +168,9 @@ function Leads() {
                 </TableCell>
                 <TableCell>{row.employee_assigned ? row.employee_assigned.name : ''}</TableCell>
                 <TableCell>{row.followup_required ? `${row.followup_required}` : ''}</TableCell>
+                <TableCell>
+                  <DeleteIcon color="primary" onClick={(event) => handleDelete(event, row._id)} />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

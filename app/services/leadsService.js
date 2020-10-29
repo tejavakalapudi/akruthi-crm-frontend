@@ -10,5 +10,5 @@ export default {
   getAllLeads: (page = 1, limit = 10) => axios.get(`${SERVER_API}/leads?limit=${limit}&page=${page}`),
   getLeadById: () => axios.get(`${SERVER_API}/leads/:id`),
   updateLead: () => axios.put(`${SERVER_API}/leads/:id`),
-  deleteLead: () => axios.delete(`${SERVER_API}/leads/:id`),
+  deleteLead: (payload) => axios.delete(`${SERVER_API}/leads/${payload}`, payload),
 };
