@@ -23,8 +23,14 @@ const bulkUploadLeads = (bulkCsv) => async () => {
 const createLead = (payload) => async (dispatch) => {
   dispatch(AppStateActions.setIsBusy(true));
   await leadsService.createLead(payload);
-  await leadsService.getAllLeads();
+  dispatch(getAllLeads());
   return dispatch(AppStateActions.setIsBusy(false));
 };
 
-export default { getAllLeads, bulkUploadLeads, createLead };
+const deleteLead = (payload) => async (dispatch) => {
+  dispatch(AppStateActions.setIsBusy(true));
+  await leadsService.deleteLead(payload);
+  dispatch(getAllLeads());
+  return dispatch(AppStateActions.setIsBusy(false));
+};
+export default { getAllLeads, bulkUploadLeads, createLead, deleteLead };
