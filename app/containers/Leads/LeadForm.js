@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import _ from 'lodash';
 import {
   Dialog,
   DialogActions,
@@ -22,24 +23,73 @@ import DateFnsUtils from '@date-io/date-fns';
 
 import { LeadsActions } from '../../redux/actions';
 
-export default ({ open, toggleModal }) => {
+export default ({ open, toggleModal, activeLead, isEdit }) => {
   const dispatch = useDispatch();
-  const requiredFields = ['name', 'contact', 'venture'];
+  const requiredFields = ['name', 'contact', 'venture', 'email'];
   const { ventures, employees } = useSelector((state) => state);
+
+  console.log('____________', activeLead, ventures, employees);
 
   const [isSchedulerOpen, enableScheduler] = useState(false);
   const [payload, setPayload] = useState({
     customer_name: '',
     contact: '',
     email: '',
-    venture: '',
+    venture: {
+      _id: '',
+      name: '',
+    },
     flat_no: '',
-    employee_assigned: '',
+    employee_assigned: {
+      _id: '',
+      name: '',
+    },
     followup_required: false,
     visit_scheduled: false,
-    note: '',
+    notes: [],
     status: 'lead_generated',
   });
+
+  useEffect(() => {
+    if (payload.customer_name !== activeLead.customer_name) {
+      console.log('______RECURRING', activeLead);
+
+      // const test = {
+      //   status: 'lead_generated',
+      //   source: 'Housing.com',
+      //   pre_sale: true,
+      //   post_sale: false,
+      //   followup_required: true,
+      //   _id: 'd4f25b71-a8d5-4d68-9c03-74c9a0132780',
+      //   customer_name: 'Gopal Naidu',
+      //   notes: [
+      //     {
+      //       createdAt: '2020-09-21T15:38:56.268Z',
+      //       _id: '5f68c91056bd996f66b4ead4',
+      //       text: 'I am interested in this project',
+      //       source: 'Housing.com',
+      //     },
+      //     {
+      //       createdAt: '2020-09-21T15:38:56.268Z',
+      //       _id: '5f68c91056bd996f66b4ead5',
+      //       text: 'Interested in  Sri Gayatri Towers Nizampet',
+      //       source: 'Housing.com',
+      //     },
+      //   ],
+      //   contact: "'+91-9000785777",
+      //   email: 'polurugopal@gmail.com',
+      //   __v: 0,
+      //   createdAt: '2020-09-21T15:38:56.352Z',
+      //   updatedAt: '2020-09-21T15:38:56.352Z',
+      // };
+
+      setPayload({
+        ..._.omit(activeLead, ['pre_sale', 'post_sale', '__v', '_id', 'createdAt', 'updatedAt']),
+        venture: activeLead.venture?._id,
+        employee_assigned: activeLead.employee_assigned?._id,
+      });
+    }
+  }, [activeLead.customer_name]);
 
   const toggleScheduler = () => {
     enableScheduler(!isSchedulerOpen);
@@ -70,9 +120,10 @@ export default ({ open, toggleModal }) => {
   };
 
   const onVentureChange = (e) => {
+    const selectedVenture = ventures.filter((v) => v._id === e.target.value).map(({ _id, name }) => ({ _id, name }));
     setPayload({
       ...payload,
-      venture: e.target.value,
+      venture: selectedVenture[0],
     });
   };
 
@@ -84,9 +135,13 @@ export default ({ open, toggleModal }) => {
   };
 
   const onEmployeeChange = (e) => {
+    const selectedEmployee = employees
+      .filter((emp) => emp._id === e.target.value)
+      .map(({ _id, name }) => ({ _id, name }));
+
     setPayload({
       ...payload,
-      employee_assigned: e.target.value,
+      employee_assigned: selectedEmployee[0],
     });
   };
 
@@ -116,14 +171,16 @@ export default ({ open, toggleModal }) => {
   };
 
   const onFormSubmit = () => {
-    dispatch(LeadsActions.createLead(payload)).then(() => {
+    // isEdit
+    console.log('++++++++++++', isEdit);
+    dispatch(LeadsActions.setLead(payload, isEdit ? 'updateLead' : 'createLead', activeLead._id)).then(() => {
       toggleModal();
     });
   };
 
   return (
     <Dialog open={open} onClose={toggleModal} aria-labelledby="form-dialog-title" maxWidth="md">
-      <DialogTitle id="form-dialog-title">Create a New Lead</DialogTitle>
+      <DialogTitle id="form-dialog-title">{isEdit ? 'Edit Lead' : 'Create a New Lead'}</DialogTitle>
       <Divider />
 
       <DialogContent>
@@ -150,6 +207,7 @@ export default ({ open, toggleModal }) => {
             value={payload.email}
             label="Email"
             variant="outlined"
+            required
             classes={{ root: 'lead-input' }}
             onChange={onEmailChange}
           />
@@ -160,7 +218,7 @@ export default ({ open, toggleModal }) => {
             <Select
               labelId="demo-customized-select-label"
               id="demo-customized-select"
-              value={payload.venture}
+              value={payload.venture._id}
               label="Venture"
               onChange={onVentureChange}
             >
@@ -183,10 +241,10 @@ export default ({ open, toggleModal }) => {
               label="Flat"
             >
               <MenuItem value="">None</MenuItem>
-              {payload.venture !== '' &&
+              {payload.venture._id !== '' &&
                 ventures
-                  .find((v) => v._id === payload.venture)
-                  .available.map((flat) => (
+                  .find((v) => v._id === payload.venture._id)
+                  ?.available.map((flat) => (
                     <MenuItem key={flat} value={flat}>
                       {flat}
                     </MenuItem>
@@ -201,7 +259,7 @@ export default ({ open, toggleModal }) => {
             <Select
               labelId="demo-customized-select-label"
               id="demo-customized-select"
-              value={payload.employee_assigned}
+              value={payload.employee_assigned._id}
               onChange={onEmployeeChange}
               label="Assign To"
             >
@@ -233,7 +291,7 @@ export default ({ open, toggleModal }) => {
               onClose={toggleScheduler}
               onAccept={toggleScheduler}
               TextFieldComponent={() => (
-                <IconButton aria-label="delete" onClick={toggleScheduler}>
+                <IconButton aria-label="calendar" onClick={toggleScheduler}>
                   <Event />
                 </IconButton>
               )}

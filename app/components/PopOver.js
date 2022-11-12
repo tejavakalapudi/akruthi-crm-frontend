@@ -3,7 +3,7 @@ import React from 'react';
 import Popover from '@material-ui/core/Popover';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import FiberManualRecordOutlinedIcon from '@material-ui/icons/FiberManualRecordOutlined';
+import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
 
 const useStyles = makeStyles((theme) => ({
   typography: {
@@ -11,11 +11,18 @@ const useStyles = makeStyles((theme) => ({
     alignItems: 'center',
     display: 'flex',
     textTransform: 'capitalize',
+    cursor: 'pointer',
+    '&:hover, &:focus': {
+      backgroundColor: theme.palette.background.default,
+    },
+  },
+  activeStatus: {
+    backgroundColor: theme.palette.background.default,
   },
 }));
-const PopOver = ({ anchorEl, onClose, statusList, formatStatusField }) => {
-  const open = Boolean(anchorEl);
 
+const PopOver = ({ anchorEl, onClose, statusList, formatStatusField, activeStatus }) => {
+  const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   const classes = useStyles();
   return (
@@ -37,8 +44,8 @@ const PopOver = ({ anchorEl, onClose, statusList, formatStatusField }) => {
     >
       {statusList.map((row, index) => (
         <div key={`status-${index}`}>
-          <Typography className={classes.typography}>
-            <FiberManualRecordOutlinedIcon
+          <Typography className={`${classes.typography} ${activeStatus === row ? classes.activeStatus : ''}`}>
+            <FiberManualRecord
               style={{ fontSize: '14px', marginRight: '10px' }}
               className={row}
               classes={{ root: 'statusList' }}

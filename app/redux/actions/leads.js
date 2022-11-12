@@ -20,11 +20,17 @@ const bulkUploadLeads = (bulkCsv) => async () => {
   return leadsUploaded;
 };
 
-const createLead = (payload) => async (dispatch) => {
+const setLead = (payload, actionType = 'createLead', id) => async (dispatch) => {
   dispatch(AppStateActions.setIsBusy(true));
-  await leadsService.createLead(payload);
-  await leadsService.getAllLeads();
-  return dispatch(AppStateActions.setIsBusy(false));
+  await leadsService[actionType](payload, id);
+  return dispatch(getAllLeads());
 };
 
-export default { getAllLeads, bulkUploadLeads, createLead };
+const deleteLeads = (ids) => async (dispatch) => {
+  dispatch(AppStateActions.setIsBusy(true));
+  console.log('_____Checked redux', ids);
+  await leadsService.deleteLeads(ids);
+  return dispatch(getAllLeads());
+};
+
+export default { getAllLeads, bulkUploadLeads, setLead, deleteLeads };

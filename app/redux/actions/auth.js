@@ -30,12 +30,14 @@ const forceLogout = () => (dispatch, getState) => {
       })
     );
     dispatch(resetAuth());
+    dispatch(AppStateActions.setIsBusy(false));
   }
 };
 
 const logout = () => (dispatch) =>
   firebaseAuth.signOut().then(() => {
     dispatch(resetAuth());
+    dispatch(AppStateActions.setIsBusy(false));
   });
 
 const initAuth = (email, pass) => (dispatch) => {
