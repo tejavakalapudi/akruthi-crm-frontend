@@ -7,8 +7,21 @@ import { Paper, Checkbox, TableRow, TableHead, TableCell, TableBody, Table, Butt
 import Pagination from '@material-ui/lab/Pagination';
 
 import { LeadsActions } from '../../redux/actions';
-import { ReactHelmet, PopOver } from '../../components';
-import CreateLead from './CreateLead';
+import { ReactHelmet, PopOver, TableToolBar } from '../../components';
+import LeadForm from './LeadForm';
+
+const initialLead = {
+  customer_name: '',
+  contact: '',
+  email: '',
+  venture: '',
+  flat_no: '',
+  employee_assigned: '',
+  followup_required: false,
+  visit_scheduled: false,
+  notes: [],
+  status: 'lead_generated',
+};
 
 const useStyles = makeStyles((theme) => ({
   header: {},
@@ -27,8 +40,10 @@ function Leads() {
   const classes = useStyles();
   const [checkedItems, setChecked] = useState([]);
   const [anchorEl, setAnchorEl] = useState(null);
+  const [activeRow, setActiveRow] = useState(null);
+  const [activeLead, setActiveLead] = useState(initialLead);
   const [isModalOpen, toggleModal] = useState(false);
-
+  console.log('______++++++', activeLead);
   const { data: leadsData, pagination } = useSelector((state) => state.leads);
 
   const statuses = useSelector((state) => state.statuses);
@@ -59,12 +74,20 @@ function Leads() {
 
   const formatStatusField = (status) => status && status.split('_').join(' ');
 
-  const handleClick = (event) => {
+  const handleClick = (event, id) => {
     setAnchorEl(event.currentTarget);
+    setActiveRow(id);
   };
 
-  const handleClose = () => {
+  const handleClose = (event) => {
+    event.stopPropagation();
     setAnchorEl(null);
+    setActiveRow(null);
+  };
+
+  const handleDelete = () => {
+    console.log('Checked Items', checkedItems);
+    dispatch(LeadsActions.deleteLeads(checkedItems));
   };
 
   const handleBulkUpload = (e) => {
@@ -75,9 +98,18 @@ function Leads() {
     }
   };
 
+  const onLeadClick = (lead) => {
+    toggleModal(true);
+    setActiveLead(lead);
+  };
+
   const handleModalToggle = () => {
     toggleModal(!isModalOpen);
+    setActiveLead(initialLead);
   };
+
+  // https://github.com/gregnb/mui-datatables
+  // For filter design
 
   return (
     <div>
@@ -108,7 +140,8 @@ function Leads() {
           </Button>
         </label>
       </div>
-      <Paper>
+      <Paper sx={{ width: '100%', mb: 2 }}>
+        <TableToolBar tableHeading="Leads" numSelected={checkedItems.length} onDeleteClick={handleDelete} />
         <Table size="small">
           <TableHead>
             <TableRow>
@@ -132,27 +165,36 @@ function Leads() {
           </TableHead>
           <TableBody>
             {leadsData.map((row, index) => (
-              <TableRow key={index}>
+              <TableRow
+                key={index}
+                onClick={() => {
+                  onLeadClick(row);
+                }}
+              >
                 <TableCell component="th" scope="row">
                   <Checkbox
                     key={row._id}
                     checked={checkedItems.includes(row._id)}
                     color="primary"
                     size="small"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       handleRowCheck(row._id);
                     }}
                   />
                 </TableCell>
                 <TableCell component="th">{row.customer_name}</TableCell>
                 <TableCell>{row.contact}</TableCell>
-                <TableCell>{row.venture ? `${row.venture.name}, ${row.flat_No}` : ''}</TableCell>
+                <TableCell>{row.venture ? `${row.venture.name}, ${row.flat_no}` : ''}</TableCell>
                 <TableCell>
                   <Chip
                     label={formatStatusField(row.status)}
                     classes={{ root: 'chip' }}
                     className={row.status}
-                    onClick={handleClick}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      handleClick(event, row._id);
+                    }}
                     selectprops={{
                       native: true,
                     }}
@@ -160,15 +202,18 @@ function Leads() {
                 </TableCell>
                 <TableCell>{row.employee_assigned ? row.employee_assigned.name : ''}</TableCell>
                 <TableCell>{row.followup_required ? `${row.followup_required}` : ''}</TableCell>
+                {activeRow === row._id && (
+                  <PopOver
+                    formatStatusField={formatStatusField}
+                    statusList={statusList}
+                    anchorEl={anchorEl}
+                    onClose={handleClose}
+                    activeStatus={row.status}
+                  />
+                )}
               </TableRow>
             ))}
           </TableBody>
-          <PopOver
-            formatStatusField={formatStatusField}
-            statusList={statusList}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-          />
         </Table>
         <Pagination
           count={pagination.total}
@@ -178,7 +223,14 @@ function Leads() {
           className={classes.pagination}
         />
       </Paper>
-      <CreateLead open={isModalOpen} toggleModal={handleModalToggle} />
+      {isModalOpen && (
+        <LeadForm
+          open={isModalOpen}
+          toggleModal={handleModalToggle}
+          isEdit={activeLead.customer_name !== ''}
+          activeLead={activeLead}
+        />
+      )}
     </div>
   );
 }

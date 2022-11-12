@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import { ConnectedRouter } from 'connected-react-router';
 
-import { LeadsActions, StatusActions, EmployeesActions, VenturesActions } from '../redux/actions';
+import { LeadsActions, StatusActions, EmployeesActions, VenturesActions, AuthActions } from '../redux/actions';
 import firebaseAuth from '../firebase';
 
 import LoadingComponent from '../components/Loading';
@@ -19,7 +19,6 @@ import { Alert, DrawableSideNav } from '../components';
 
 const AppRouter = ({ history, currentTheme, toggleTheme }) => {
   const isAppBusy = useSelector((state) => state.appState.isBusy);
-  // const currentAuth = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -45,6 +44,7 @@ const AppRouter = ({ history, currentTheme, toggleTheme }) => {
 
     firebaseAuth.onAuthStateChanged((user) => {
       if (user) {
+        dispatch(AuthActions.persistAuth(user));
         dispatch(StatusActions.getAllStatuses());
         dispatch(LeadsActions.getAllLeads());
         dispatch(EmployeesActions.getAllEmployees());
