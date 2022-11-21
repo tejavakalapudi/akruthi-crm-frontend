@@ -1,4 +1,4 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createTheme } from '@material-ui/core/styles';
 import light from './light';
 import dark from './dark';
 
@@ -12,7 +12,7 @@ const getThemes = (type) => {
       fontFamily: "'Poppins', 'Robotto', serif",
     },
   };
-  return createMuiTheme(theme);
+  return createTheme(theme);
 };
 
 export default getThemes;

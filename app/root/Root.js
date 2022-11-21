@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { hot } from 'react-hot-loader';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { CssBaseline } from '@material-ui/core';
@@ -12,7 +11,7 @@ import getThemes from '../settings/themes';
 
 import '../styles/app.scss';
 
-const { store, persistor } = configureStore();
+const { store, persistor } = configureStore;
 
 const App = () => {
   const [currentTheme, setMode] = useState('light');
@@ -45,4 +44,4 @@ const App = () => {
   );
 };
 
-export default hot(module)(App);
+export default App;

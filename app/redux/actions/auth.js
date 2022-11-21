@@ -1,5 +1,15 @@
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
 import * as types from '../../constants/actionTypes';
 import firebaseAuth, { googleAuthProvider } from '../../firebase';
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+} from 'firebase/auth';
+
 import AlertActions from './alert';
 import AppStateActions from './appState';
 import authService from '../../services/authService';
@@ -35,15 +45,14 @@ const forceLogout = () => (dispatch, getState) => {
 };
 
 const logout = () => (dispatch) =>
-  firebaseAuth.signOut().then(() => {
+  signOut(getAuth()).then(() => {
     dispatch(resetAuth());
     dispatch(AppStateActions.setIsBusy(false));
   });
 
 const initAuth = (email, pass) => (dispatch) => {
   dispatch(AppStateActions.setIsBusy(true));
-  return firebaseAuth
-    .signInWithEmailAndPassword(email, pass)
+  return signInWithEmailAndPassword(email, pass)
     .then(() => {
       dispatch(persistAuth(firebaseAuth.currentUser));
     })
@@ -61,13 +70,13 @@ const initAuth = (email, pass) => (dispatch) => {
 
 const signInWithGoogle = () => (dispatch) => {
   dispatch(AppStateActions.setIsBusy(true));
-  return firebaseAuth
-    .signInWithPopup(googleAuthProvider)
+  return signInWithPopup(getAuth(), googleAuthProvider)
     .then(() => {
       dispatch(persistAuth(firebaseAuth.currentUser));
     })
-    .catch(() => {
+    .catch((e) => {
       dispatch(setAuth(false));
+      console.log("Error while signing in with Google", e);
       dispatch(AppStateActions.setIsBusy(false));
       dispatch(
         AlertActions.setAlert({
@@ -77,5 +86,26 @@ const signInWithGoogle = () => (dispatch) => {
       );
     });
 };
+
+// const signInWithGoogle = createAsyncThunk(
+//   'auth/signInWithGoogle',
+//   async () => {
+//     // dispatch(AppStateActions.setIsBusy(true));
+//     return signInWithPopup(firebaseAuth.currentUser, googleAuthProvider)
+//       .then(() => {
+//         dispatch(persistAuth(firebaseAuth.currentUser));
+//       })
+//       .catch(() => {
+//         dispatch(setAuth(false));
+//         dispatch(AppStateActions.setIsBusy(false));
+//         dispatch(
+//           AlertActions.setAlert({
+//             message: 'Authorization failed! Please try again.',
+//             type: 'error',
+//           })
+//         );
+//       });
+//   }
+// )
 
 export default { initAuth, logout, persistAuth, forceLogout, signInWithGoogle };

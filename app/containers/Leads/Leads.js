@@ -43,7 +43,6 @@ function Leads() {
   const [activeRow, setActiveRow] = useState(null);
   const [activeLead, setActiveLead] = useState(initialLead);
   const [isModalOpen, toggleModal] = useState(false);
-  console.log('______++++++', activeLead);
   const { data: leadsData, pagination } = useSelector((state) => state.leads);
 
   const statuses = useSelector((state) => state.statuses);
@@ -86,7 +85,6 @@ function Leads() {
   };
 
   const handleDelete = () => {
-    console.log('Checked Items', checkedItems);
     dispatch(LeadsActions.deleteLeads(checkedItems));
   };
 

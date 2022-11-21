@@ -1,4 +1,11 @@
-import * as firebase from 'firebase';
+import { initializeApp } from 'firebase/app';
+import {
+  getAuth,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signOut,
+} from 'firebase/auth';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -12,11 +19,11 @@ const firebaseConfig = {
   measurementId: 'G-X33XX678LS',
 };
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 
-export const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
+export const googleAuthProvider = new GoogleAuthProvider();
 googleAuthProvider.addScope('profile');
 googleAuthProvider.addScope('email');
 
-const firebaseAuth = firebase.auth();
+const firebaseAuth = getAuth();
 export default firebaseAuth;

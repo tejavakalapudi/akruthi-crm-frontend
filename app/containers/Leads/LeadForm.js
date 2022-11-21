@@ -28,8 +28,6 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
   const requiredFields = ['name', 'contact', 'venture', 'email'];
   const { ventures, employees } = useSelector((state) => state);
 
-  console.log('____________', activeLead, ventures, employees);
-
   const [isSchedulerOpen, enableScheduler] = useState(false);
   const [payload, setPayload] = useState({
     customer_name: '',
@@ -172,7 +170,6 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
 
   const onFormSubmit = () => {
     // isEdit
-    console.log('++++++++++++', isEdit);
     dispatch(LeadsActions.setLead(payload, isEdit ? 'updateLead' : 'createLead', activeLead._id)).then(() => {
       toggleModal();
     });
@@ -280,7 +277,9 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
             control={<Checkbox color="primary" onChange={scheduleVisit} />}
             checked={payload.visit_scheduled}
           />
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          {
+            /*
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
               margin="normal"
               id="date-picker-dialog"
@@ -297,6 +296,8 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
               )}
             />
           </MuiPickersUtilsProvider>
+            */
+          }
 
           <FormControlLabel
             labelPlacement="start"
@@ -304,6 +305,8 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
             checked={payload.followup_required}
             control={<Checkbox color="primary" onChange={scheduleFollowUp} />}
           />
+          {
+            /*
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
               margin="normal"
@@ -321,6 +324,9 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
               )}
             />
           </MuiPickersUtilsProvider>
+            */
+          }
+
 
           <br />
 

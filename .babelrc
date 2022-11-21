@@ -21,7 +21,7 @@
                 "useBuiltIns": true
             }
         ],
-        "react-hot-loader/babel",
+        "react-refresh/babel",
         "syntax-dynamic-import"
     ],
     "env": {

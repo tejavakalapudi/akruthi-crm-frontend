@@ -21,7 +21,19 @@ module.exports = () => ({
         rules: [
             {
                 test: /\.sa?css$/,
-                use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"]
+                use: [
+                    MiniCssExtractPlugin.loader, 
+                    {
+                        loader: "css-loader",
+                        options: {
+                            url: false,
+                            modules: {
+                                auto: (resourcePath) => resourcePath.endsWith("settings.scss")
+                            }
+                        }
+                    },
+                    "sass-loader"
+                ]
             }
         ]
     },

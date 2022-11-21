@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 export default () => {
   const dispatch = useDispatch();
   const classes = useStyles();
-
   // TODO: Remove this in future
   const copyJwt = async () => {
     const token = await firebaseAuth.currentUser.getIdToken();
