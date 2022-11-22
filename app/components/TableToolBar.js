@@ -29,13 +29,13 @@ export default (props) => {
 
       {numSelected > 0 ? (
         <Tooltip title="Delete">
-          <IconButton onClick={onDeleteClick}>
+          <IconButton onClick={onDeleteClick} size="large">
             <Delete />
           </IconButton>
         </Tooltip>
       ) : (
         <Tooltip title="Filter list">
-          <IconButton>
+          <IconButton size="large">
             <FilterList />
           </IconButton>
         </Tooltip>

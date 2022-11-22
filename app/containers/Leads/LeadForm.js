@@ -18,7 +18,6 @@ import {
   IconButton,
 } from '@mui/material/';
 import { Event } from '@mui/icons-material';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 
 import { LeadsActions } from '../../redux/actions';

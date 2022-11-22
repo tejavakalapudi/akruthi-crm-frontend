@@ -1,4 +1,4 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, adaptV4Theme } from '@mui/material/styles';
 import light from './light';
 import dark from './dark';
 
@@ -12,7 +12,7 @@ const getThemes = (type) => {
       fontFamily: "'Poppins', 'Robotto', serif",
     },
   };
-  return createTheme(theme);
+  return createTheme(adaptV4Theme(theme));
 };
 
 export default getThemes;

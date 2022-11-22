@@ -73,13 +73,13 @@ export default ({ currentTheme, toggleTheme }) => {
         <ListItem>
           <ListItemText id="switch-list-label-locale" primary="Locale" />
           <ListItemSecondaryAction>
-            <FormControl>
+            <FormControl variant="standard">
               <Select
+                variant="standard"
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={currentLang}
-                onChange={onLanguageHandle}
-              >
+                onChange={onLanguageHandle}>
                 <MenuItem value="en">en</MenuItem>
                 <MenuItem value="hi">hi</MenuItem>
               </Select>

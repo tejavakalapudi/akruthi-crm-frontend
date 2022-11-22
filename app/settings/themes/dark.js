@@ -2,7 +2,7 @@ import variables from '../../styles/base/_settings.scss';
 
 const theme = {
   palette: {
-    type: 'dark',
+    mode: 'dark',
     primary: {
       main: variables.darkModePrimary,
       light: 'rgb(81, 91, 95)',

@@ -24,7 +24,7 @@ export default (props) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const theme = useTheme();
-  const isDarkMode = theme.palette.type === 'dark';
+  const isDarkMode = theme.palette.mode === 'dark';
 
   useEffect(() => {
     if (isAuthorized) {
