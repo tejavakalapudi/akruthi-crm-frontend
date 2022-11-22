@@ -2,9 +2,9 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import { Paper, Checkbox, TableRow, TableHead, TableCell, TableBody, Table, Button, Chip } from '@material-ui/core';
-import Pagination from '@material-ui/lab/Pagination';
+import { makeStyles } from '@mui/styles';
+import { Paper, Checkbox, TableRow, TableHead, TableCell, TableBody, Table, Button, Chip } from '@mui/material';
+import {Pagination} from '@mui/material';
 
 import { LeadsActions } from '../../redux/actions';
 import { ReactHelmet, PopOver, TableToolBar } from '../../components';
@@ -43,7 +43,6 @@ function Leads() {
   const [activeRow, setActiveRow] = useState(null);
   const [activeLead, setActiveLead] = useState(initialLead);
   const [isModalOpen, toggleModal] = useState(false);
-  console.log('______++++++', activeLead);
   const { data: leadsData, pagination } = useSelector((state) => state.leads);
 
   const statuses = useSelector((state) => state.statuses);
@@ -86,7 +85,6 @@ function Leads() {
   };
 
   const handleDelete = () => {
-    console.log('Checked Items', checkedItems);
     dispatch(LeadsActions.deleteLeads(checkedItems));
   };
 

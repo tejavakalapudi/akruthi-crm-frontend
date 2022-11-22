@@ -16,9 +16,8 @@ import {
   InputLabel,
   Select,
   IconButton,
-} from '@material-ui/core/';
-import { Event } from '@material-ui/icons';
-import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
+} from '@mui/material/';
+import { Event } from '@mui/icons-material';
 import DateFnsUtils from '@date-io/date-fns';
 
 import { LeadsActions } from '../../redux/actions';
@@ -27,8 +26,6 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
   const dispatch = useDispatch();
   const requiredFields = ['name', 'contact', 'venture', 'email'];
   const { ventures, employees } = useSelector((state) => state);
-
-  console.log('____________', activeLead, ventures, employees);
 
   const [isSchedulerOpen, enableScheduler] = useState(false);
   const [payload, setPayload] = useState({
@@ -172,7 +169,6 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
 
   const onFormSubmit = () => {
     // isEdit
-    console.log('++++++++++++', isEdit);
     dispatch(LeadsActions.setLead(payload, isEdit ? 'updateLead' : 'createLead', activeLead._id)).then(() => {
       toggleModal();
     });
@@ -280,7 +276,9 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
             control={<Checkbox color="primary" onChange={scheduleVisit} />}
             checked={payload.visit_scheduled}
           />
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          {
+            /*
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
               margin="normal"
               id="date-picker-dialog"
@@ -297,6 +295,8 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
               )}
             />
           </MuiPickersUtilsProvider>
+            */
+          }
 
           <FormControlLabel
             labelPlacement="start"
@@ -304,6 +304,8 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
             checked={payload.followup_required}
             control={<Checkbox color="primary" onChange={scheduleFollowUp} />}
           />
+          {
+            /*
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
               margin="normal"
@@ -321,6 +323,9 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
               )}
             />
           </MuiPickersUtilsProvider>
+            */
+          }
+
 
           <br />
 

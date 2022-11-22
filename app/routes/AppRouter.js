@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
-import { Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
-import { ConnectedRouter } from 'connected-react-router';
+// import { HistoryRouter as Router } from "redux-first-history/rr6";
 
 import { LeadsActions, StatusActions, EmployeesActions, VenturesActions, AuthActions } from '../redux/actions';
 import firebaseAuth from '../firebase';
@@ -13,14 +13,19 @@ import Ventures from '../containers/Ventures';
 import Analytics from '../containers/Analytics';
 import Leads from '../containers/Leads';
 import LoginPage from '../containers/login';
-import PrivateRoute from './PrivateRoute';
-import PublicRoute from './PublicRoute';
+// import PrivateRoute from './PrivateRoute';
+// import PublicRoute from './PublicRoute';
 import { Alert, DrawableSideNav } from '../components';
+
+function RequireAuth({ children, redirectTo, isAuthorized, loc }) {
+  return isAuthorized ? children : <Navigate to={redirectTo} replace/>;
+}
 
 const AppRouter = ({ history, currentTheme, toggleTheme }) => {
   const isAppBusy = useSelector((state) => state.appState.isBusy);
-  const dispatch = useDispatch();
+  const isAuthorized = useSelector((state) => state.auth.isAuthorized);
 
+  const dispatch = useDispatch();
   useEffect(() => {
     axios.interceptors.request.use(
       async (config) => {
@@ -34,7 +39,7 @@ const AppRouter = ({ history, currentTheme, toggleTheme }) => {
             },
           };
         } catch (error) {
-          return console.log('-------', error);
+          return console.log('Interceptor failed with an error,', error);
         }
       },
       (error) => {
@@ -54,19 +59,67 @@ const AppRouter = ({ history, currentTheme, toggleTheme }) => {
   }, []);
 
   return (
-    <ConnectedRouter history={history}>
+    <Router history={history}>
       <Alert />
       <DrawableSideNav currentTheme={currentTheme} toggleTheme={toggleTheme} />
       {isAppBusy && <LoadingComponent />}
-      <Switch>
-        <PrivateRoute path="/" component={HomePage} exact />
-        <PublicRoute path="/login" component={LoginPage} />
-        <PrivateRoute path="/dashboard" component={HomePage} exact />
-        <PrivateRoute path="/leads" component={Leads} exact />
-        <PrivateRoute path="/ventures" component={Ventures} exact />
-        <PrivateRoute path="/analytics" component={Analytics} exact />
-      </Switch>
-    </ConnectedRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized} >
+              <HomePage/>
+            </RequireAuth>
+          }
+          exact
+        />
+        <Route
+          path="/login"
+          element={
+            <RequireAuth redirectTo={"/"} isAuthorized={!isAuthorized}>
+              <LoginPage/>
+            </RequireAuth>
+          }
+          exact
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized}  >
+              <HomePage/>
+            </RequireAuth>
+          }
+          exact
+        />
+        <Route
+          path="/leads"
+          element={
+            <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized}>
+              <Leads/>
+            </RequireAuth>
+          }
+          exact
+        />
+        <Route
+            path="/ventures"
+            element={
+              <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized}  >
+                <Ventures/>
+              </RequireAuth>
+            }
+            exact
+          />
+        <Route
+          path="/analytics"
+          element={
+            <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized} >
+              <Analytics/>
+            </RequireAuth>
+          }
+          exact
+        />
+      </Routes>
+    </Router>
   );
 };
 

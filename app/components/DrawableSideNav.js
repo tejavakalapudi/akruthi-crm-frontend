@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 
-import { makeStyles } from '@material-ui/core/styles';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Avatar, Popover } from '@material-ui/core';
-import { DashboardOutlined, ApartmentOutlined, TimelineOutlined, DnsOutlined, ChevronRight } from '@material-ui/icons';
+import { makeStyles } from '@mui/styles';
+import { Drawer, List, ListItem, ListItemIcon, ListItemText, Divider, Avatar, Popover } from '@mui/material';
+import { DashboardOutlined, ApartmentOutlined, TimelineOutlined, DnsOutlined, ChevronRight } from '@mui/icons-material';
 
 import Settings from './Settings';
 import LogoIcon from '../assets/akruthi-logo.png';

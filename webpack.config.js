@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 const { resolve } = require('path');
 const { HotModuleReplacementPlugin, DefinePlugin } = require('webpack');
-const webpackMerge = require('webpack-merge');
+const {merge} = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { config } = require('dotenv');
 
@@ -16,7 +16,7 @@ module.exports = ({ mode } = { mode: 'production' }) => {
     return prev;
   }, {});
 
-  return webpackMerge(
+  return merge(
     {
       mode,
       entry: './app/index.js',

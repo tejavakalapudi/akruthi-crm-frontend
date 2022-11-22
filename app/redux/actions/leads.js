@@ -28,7 +28,6 @@ const setLead = (payload, actionType = 'createLead', id) => async (dispatch) => 
 
 const deleteLeads = (ids) => async (dispatch) => {
   dispatch(AppStateActions.setIsBusy(true));
-  console.log('_____Checked redux', ids);
   await leadsService.deleteLeads(ids);
   return dispatch(getAllLeads());
 };
