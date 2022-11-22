@@ -1,9 +1,9 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
-import Popover from '@material-ui/core/Popover';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
-import FiberManualRecord from '@material-ui/icons/FiberManualRecord';
+import Popover from '@mui/material/Popover';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from '@mui/styles';
+import FiberManualRecord from '@mui/icons-material/FiberManualRecord';
 
 const useStyles = makeStyles((theme) => ({
   typography: {

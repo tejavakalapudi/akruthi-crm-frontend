@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import React from 'react';
-import MuiAlert from '@material-ui/lab/Alert';
-import { Snackbar } from '@material-ui/core';
+import MuiAlert from '@mui/lab/Alert';
+import { Snackbar } from '@mui/material';
 import { useSelector, useDispatch } from 'react-redux';
 import { AlertActions } from '../redux/actions';
 

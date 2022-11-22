@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
-import { CssBaseline } from '@material-ui/core';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { CssBaseline } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 import AppRouter from '../routes/AppRouter';
 import configureStore, { history } from '../redux/store/configureStore';
 import getThemes from '../settings/themes';

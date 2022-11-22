@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
-import { Typography, IconButton, Toolbar, Tooltip } from '@material-ui/core';
-import { Delete, FilterList } from '@material-ui/icons';
+import { Typography, IconButton, Toolbar, Tooltip } from '@mui/material';
+import { Delete, FilterList } from '@mui/icons-material';
 
 export default (props) => {
   const { numSelected, tableHeading, onDeleteClick } = props;

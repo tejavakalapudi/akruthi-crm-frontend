@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Typography, Container, TextField, Divider } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Button, Typography, Container, TextField, Divider } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Logo, GoogleSignInButton } from '../../components';
 
 const useStyles = makeStyles((theme) => ({

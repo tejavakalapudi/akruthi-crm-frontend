@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { Grid } from '@material-ui/core';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { Grid } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+import { useTheme } from '@mui/material/styles';
 import { AuthActions } from '../../redux/actions';
 
 import { ReactHelmet } from '../../components';
