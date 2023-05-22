@@ -6,5 +6,6 @@ import DrawableSideNav from './DrawableSideNav';
 import Settings from './Settings';
 import PopOver from './PopOver';
 import TableToolBar from './TableToolBar';
+import Activity from './Activity';
 
-export { GoogleSignInButton, Alert, ReactHelmet, Logo, DrawableSideNav, Settings, PopOver, TableToolBar };
+export { GoogleSignInButton, Alert, ReactHelmet, Logo, DrawableSideNav, Settings, PopOver, TableToolBar, Activity };

@@ -2,8 +2,14 @@
 import React from 'react';
 import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemButton from '@mui/material/ListItemButton';
 import { makeStyles } from '@mui/styles';
 import FiberManualRecord from '@mui/icons-material/FiberManualRecord';
+import { capitalize } from 'lodash';
 
 const useStyles = makeStyles((theme) => ({
   typography: {
@@ -21,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PopOver = ({ anchorEl, onClose, statusList, formatStatusField, activeStatus }) => {
+const PopOver = ({ anchorEl, onClose, statusList, formatStatusField, activeStatus, selectStatus }) => {
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
   const classes = useStyles();
@@ -42,19 +48,26 @@ const PopOver = ({ anchorEl, onClose, statusList, formatStatusField, activeStatu
       boxshadow={0}
       anchorReference="anchorEl"
     >
-      {statusList.map((row, index) => (
-        <div key={`status-${index}`}>
-          <Typography className={`${classes.typography} ${activeStatus === row ? classes.activeStatus : ''}`}>
-            <FiberManualRecord
-              style={{ fontSize: '14px', marginRight: '10px' }}
-              className={row}
-              classes={{ root: 'statusList' }}
-              fontSize="small"
-            />
-            {formatStatusField(row)}
-          </Typography>
-        </div>
-      ))}
+      <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+        {statusList.map((row, index) => (
+          <ListItem
+            key={index}
+            disablePadding
+          >
+            <ListItemButton onClick={ () => {selectStatus(row)}} dense>
+              <ListItemIcon style={{minWidth: 32}}>
+                <FiberManualRecord
+                  style={{ fontSize: '14px' }}
+                  className={row}
+                  classes={{ root: 'statusList' }}
+                  fontSize="small"
+                />
+              </ListItemIcon>
+              <ListItemText style={{ textTransform: 'capitalize', fontWeight: 'bold' }} primary={formatStatusField(row)} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
     </Popover>
   );
 };

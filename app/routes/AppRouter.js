@@ -63,62 +63,65 @@ const AppRouter = ({ history, currentTheme, toggleTheme }) => {
       <Alert />
       <DrawableSideNav currentTheme={currentTheme} toggleTheme={toggleTheme} />
       {isAppBusy && <LoadingComponent />}
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized} >
-              <HomePage/>
-            </RequireAuth>
-          }
-          exact
-        />
-        <Route
-          path="/login"
-          element={
-            <RequireAuth redirectTo={"/"} isAuthorized={!isAuthorized}>
-              <LoginPage/>
-            </RequireAuth>
-          }
-          exact
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized}  >
-              <HomePage/>
-            </RequireAuth>
-          }
-          exact
-        />
-        <Route
-          path="/leads"
-          element={
-            <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized}>
-              <Leads/>
-            </RequireAuth>
-          }
-          exact
-        />
-        <Route
-            path="/ventures"
+      <div className={`routes-wrapper ${isAuthorized ? 'authorized' : ''}`}>
+        <Routes>
+          <Route
+            path="/"
             element={
-              <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized}  >
-                <Ventures/>
+              <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized} >
+                <HomePage/>
               </RequireAuth>
             }
             exact
           />
-        <Route
-          path="/analytics"
-          element={
-            <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized} >
-              <Analytics/>
-            </RequireAuth>
-          }
-          exact
-        />
-      </Routes>
+          <Route
+            path="/login"
+            element={
+              <RequireAuth redirectTo={"/"} isAuthorized={!isAuthorized}>
+                <LoginPage/>
+              </RequireAuth>
+            }
+            exact
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized}  >
+                <HomePage/>
+              </RequireAuth>
+            }
+            exact
+          />
+          <Route
+            path="/leads"
+            element={
+              <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized}>
+                <Leads/>
+              </RequireAuth>
+            }
+            exact
+          />
+          <Route
+              path="/ventures"
+              element={
+                <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized}  >
+                  <Ventures/>
+                </RequireAuth>
+              }
+              exact
+            />
+          <Route
+            path="/analytics"
+            element={
+              <RequireAuth redirectTo={"/login"} isAuthorized={isAuthorized} >
+                <Analytics/>
+              </RequireAuth>
+            }
+            exact
+          />
+        </Routes>
+      </div>
+
     </Router>
   );
 };

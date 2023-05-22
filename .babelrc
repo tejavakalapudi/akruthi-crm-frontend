@@ -21,7 +21,6 @@
                 "useBuiltIns": true
             }
         ],
-        "react-refresh/babel",
         "syntax-dynamic-import"
     ],
     "env": {
