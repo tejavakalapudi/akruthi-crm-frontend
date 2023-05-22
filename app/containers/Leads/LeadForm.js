@@ -17,17 +17,21 @@ import {
   Select,
   IconButton,
 } from '@mui/material/';
-import { Event } from '@mui/icons-material';
-import DateFnsUtils from '@date-io/date-fns';
+
+import dayjs, { Dayjs } from 'dayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import { LeadsActions } from '../../redux/actions';
+import { objectDifference } from "../../utils/objectDifference";
 
-export default ({ open, toggleModal, activeLead, isEdit }) => {
+export default ({ open, toggleModal, activeLead, isEdit, isNotesEnabled, currentUser }) => {
   const dispatch = useDispatch();
   const requiredFields = ['name', 'contact', 'venture', 'email'];
   const { ventures, employees } = useSelector((state) => state);
 
-  const [isSchedulerOpen, enableScheduler] = useState(false);
+  const [currentNote, setCurrentNote] = useState('');
   const [payload, setPayload] = useState({
     customer_name: '',
     contact: '',
@@ -41,15 +45,15 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
       _id: '',
       name: '',
     },
-    followup_required: false,
-    visit_scheduled: false,
+    followup: null,
+    visit_scheduled: null,
     notes: [],
     status: 'lead_generated',
   });
 
   useEffect(() => {
     if (payload.customer_name !== activeLead.customer_name) {
-      console.log('______RECURRING', activeLead);
+      console.log('______RECURRING', activeLead, payload);
 
       // const test = {
       //   status: 'lead_generated',
@@ -80,17 +84,14 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
       //   updatedAt: '2020-09-21T15:38:56.352Z',
       // };
 
+      //_.omit(activeLead, ['pre_sale', 'post_sale', '__v', '_id', 'createdAt', 'updatedAt'])
       setPayload({
-        ..._.omit(activeLead, ['pre_sale', 'post_sale', '__v', '_id', 'createdAt', 'updatedAt']),
-        venture: activeLead.venture?._id,
-        employee_assigned: activeLead.employee_assigned?._id,
+        ...activeLead,
+        venture: activeLead.venture,
+        employee_assigned: activeLead.employee_assigned,
       });
     }
   }, [activeLead.customer_name]);
-
-  const toggleScheduler = () => {
-    enableScheduler(!isSchedulerOpen);
-  };
 
   const onNameChange = (e) => {
     setPayload({
@@ -142,25 +143,28 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
     });
   };
 
-  const scheduleVisit = () => {
+  const scheduleVisit = (e) => {
     setPayload({
       ...payload,
-      visit_scheduled: !payload.visit_scheduled,
+      visit_scheduled: e.toISOString(),
     });
   };
 
-  const scheduleFollowUp = () => {
+  const scheduleFollowUp = (e) => {
     setPayload({
       ...payload,
-      followup_required: !payload.followup_required,
+      followup: e.toISOString(),
     });
   };
 
   const onNotesChange = (e) => {
-    setPayload({
-      ...payload,
-      note: e.target.value,
-    });
+
+    // setPayload({
+    //   ...payload,
+    //   notes: [...payload.notes, e.target.value]
+    // });
+
+    setCurrentNote(e.target.value);
   };
 
   const isDisabled = () => {
@@ -168,8 +172,26 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
   };
 
   const onFormSubmit = () => {
+
+    let modifiedPayload = {...payload};
+
+    if(isNotesEnabled && currentNote.length > 0){
+      modifiedPayload = {
+        ...modifiedPayload,
+        notes: [
+          ...modifiedPayload.notes, 
+          {
+            text: currentNote,
+            source: currentUser
+          }
+        ]
+      }
+    }
+   
+    const payloadDiff = objectDifference(activeLead, modifiedPayload);
+    
     // isEdit
-    dispatch(LeadsActions.setLead(payload, isEdit ? 'updateLead' : 'createLead', activeLead._id)).then(() => {
+    dispatch(LeadsActions.setLead(payloadDiff, isEdit ? 'updateLead' : 'createLead', activeLead._id)).then(() => {
       toggleModal();
     });
   };
@@ -181,164 +203,129 @@ export default ({ open, toggleModal, activeLead, isEdit }) => {
 
       <DialogContent>
         <form>
-          <TextField
-            value={payload.customer_name}
-            label="Name"
-            variant="outlined"
-            required
-            classes={{ root: 'lead-input' }}
-            onChange={onNameChange}
-          />
-          <br />
-          <TextField
-            value={payload.contact}
-            label="Phone"
-            variant="outlined"
-            required
-            classes={{ root: 'lead-input' }}
-            onChange={onPhoneChange}
-          />
-          <br />
-          <TextField
-            value={payload.email}
-            label="Email"
-            variant="outlined"
-            required
-            classes={{ root: 'lead-input' }}
-            onChange={onEmailChange}
-          />
-          <br />
-
-          <FormControl variant="outlined" classes={{ root: 'lead-input venture' }} required>
-            <InputLabel id="demo-customized-select-label">Venture</InputLabel>
-            <Select
-              labelId="demo-customized-select-label"
-              id="demo-customized-select"
-              value={payload.venture._id}
-              label="Venture"
-              onChange={onVentureChange}
-            >
-              <MenuItem value="">None</MenuItem>
-              {ventures.map((v) => (
-                <MenuItem key={v._id} value={v._id}>
-                  {v.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl variant="outlined" classes={{ root: 'lead-input flat' }} disabled={payload.venture === ''}>
-            <InputLabel id="demo-customized-select-label">Flat</InputLabel>
-            <Select
-              labelId="demo-customized-select-label"
-              id="demo-customized-select"
-              value={payload.flat_no}
-              onChange={onFlatChange}
-              label="Flat"
-            >
-              <MenuItem value="">None</MenuItem>
-              {payload.venture._id !== '' &&
-                ventures
-                  .find((v) => v._id === payload.venture._id)
-                  ?.available.map((flat) => (
-                    <MenuItem key={flat} value={flat}>
-                      {flat}
-                    </MenuItem>
-                  ))}
-            </Select>
-          </FormControl>
-
-          <br />
-
-          <FormControl variant="outlined" classes={{ root: 'lead-input' }}>
-            <InputLabel id="demo-customized-select-label">Assign To</InputLabel>
-            <Select
-              labelId="demo-customized-select-label"
-              id="demo-customized-select"
-              value={payload.employee_assigned._id}
-              onChange={onEmployeeChange}
-              label="Assign To"
-            >
-              <MenuItem value="">None</MenuItem>
-              {employees.map((e) => (
-                <MenuItem key={e._id} value={e._id}>
-                  {e.name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <br />
-
-          <FormControlLabel
-            labelPlacement="start"
-            label="Schedule Visit"
-            control={<Checkbox color="primary" onChange={scheduleVisit} />}
-            checked={payload.visit_scheduled}
-          />
-          {
-            /*
-                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              margin="normal"
-              id="date-picker-dialog"
-              selectedDate={new Date('2014-08-18T21:11:54')}
-              onChange={() => {}}
-              showTodayButton
-              open={isSchedulerOpen}
-              onClose={toggleScheduler}
-              onAccept={toggleScheduler}
-              TextFieldComponent={() => (
-                <IconButton aria-label="calendar" onClick={toggleScheduler}>
-                  <Event />
-                </IconButton>
-              )}
+          {!isNotesEnabled ? 
+            <>
+            <TextField
+              value={payload.customer_name}
+              label="Name"
+              variant="outlined"
+              required
+              classes={{ root: 'lead-input' }}
+              onChange={onNameChange}
             />
-          </MuiPickersUtilsProvider>
-            */
-          }
-
-          <FormControlLabel
-            labelPlacement="start"
-            label="Follow up"
-            checked={payload.followup_required}
-            control={<Checkbox color="primary" onChange={scheduleFollowUp} />}
-          />
-          {
-            /*
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              margin="normal"
-              id="date-picker-dialog"
-              selectedDate={new Date('2014-08-18T21:11:54')}
-              onChange={() => {}}
-              showTodayButton
-              open={isSchedulerOpen}
-              onClose={toggleScheduler}
-              onAccept={toggleScheduler}
-              TextFieldComponent={() => (
-                <IconButton aria-label="delete" onClick={toggleScheduler}>
-                  <Event />
-                </IconButton>
-              )}
+            <br />
+            <TextField
+              value={payload.contact}
+              label="Phone"
+              variant="outlined"
+              required
+              classes={{ root: 'lead-input' }}
+              onChange={onPhoneChange}
             />
-          </MuiPickersUtilsProvider>
-            */
+            <br />
+            <TextField
+              value={payload.email}
+              label="Email"
+              variant="outlined"
+              required
+              classes={{ root: 'lead-input' }}
+              onChange={onEmailChange}
+            />
+            <br />
+  
+            <FormControl variant="outlined" classes={{ root: 'lead-input venture' }} required>
+              <InputLabel id="demo-customized-select-label">Venture</InputLabel>
+              <Select
+                labelId="demo-customized-select-label"
+                id="demo-customized-select"
+                value={payload.venture._id}
+                label="Venture"
+                onChange={onVentureChange}
+              >
+                <MenuItem value="">None</MenuItem>
+                {ventures.map((v) => (
+                  <MenuItem key={v._id} value={v._id}>
+                    {v.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+  
+            <FormControl variant="outlined" classes={{ root: 'lead-input flat' }} disabled={payload.venture === ''}>
+              <InputLabel id="demo-customized-select-label">Flat</InputLabel>
+              <Select
+                labelId="demo-customized-select-label"
+                id="demo-customized-select"
+                value={payload.flat_no}
+                onChange={onFlatChange}
+                label="Flat"
+              >
+                <MenuItem value="">None</MenuItem>
+                {payload.venture._id !== '' &&
+                  ventures
+                    .find((v) => v._id === payload.venture._id)
+                    ?.available.map((flat) => (
+                      <MenuItem key={flat} value={flat}>
+                        {flat}
+                      </MenuItem>
+                    ))}
+              </Select>
+            </FormControl>
+  
+            <br />
+  
+            <FormControl variant="outlined" classes={{ root: 'lead-input' }}>
+              <InputLabel id="demo-customized-select-label">Assign To</InputLabel>
+              <Select
+                labelId="demo-customized-select-label"
+                id="demo-customized-select"
+                value={payload.employee_assigned._id}
+                onChange={onEmployeeChange}
+                label="Assign To"
+              >
+                <MenuItem value="">None</MenuItem>
+                {employees.map((e) => (
+                  <MenuItem key={e._id} value={e._id}>
+                    {e.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+  
+            <br />
+            
+            <div className='lead-input date-picker'>
+            <LocalizationProvider dateAdapter={AdapterDayjs} >
+              <DatePicker label="Schedule Visit" 
+                value={dayjs(payload.visit_scheduled)}
+                onChange={scheduleVisit}
+              />
+            </LocalizationProvider>
+            </div>
+            <FormControl variant="outlined" classes={{ root: 'lead-input date-picker' }}>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker 
+                  label="Follow Up" 
+                  value={dayjs(payload.followup)} 
+                  onChange={scheduleFollowUp} 
+                />
+              </LocalizationProvider>
+            </FormControl>
+  
+            <br />
+            </>
+            :
+            <TextField
+              id="outlined-multiline-static"
+              label="Notes"
+              multiline
+              rows={4}
+              variant="outlined"
+              classes={{ root: 'lead-input' }}
+              value={payload.value}
+              onChange={onNotesChange}
+            />
           }
-
-
-          <br />
-
-          <TextField
-            id="outlined-multiline-static"
-            label="Notes"
-            multiline
-            rows={4}
-            variant="outlined"
-            classes={{ root: 'lead-input' }}
-            value={payload.value}
-            onChange={onNotesChange}
-          />
         </form>
       </DialogContent>
 

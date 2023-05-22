@@ -3,12 +3,13 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles } from '@mui/styles';
-import { Paper, Checkbox, TableRow, TableHead, TableCell, TableBody, Table, Button, Chip } from '@mui/material';
+import { Paper, Checkbox, TableRow, TableHead, TableCell, TableBody, Table, Button } from '@mui/material';
 import {Pagination} from '@mui/material';
 
 import { LeadsActions } from '../../redux/actions';
-import { ReactHelmet, PopOver, TableToolBar } from '../../components';
+import { ReactHelmet, TableToolBar } from '../../components';
 import LeadForm from './LeadForm';
+import ExpandableRow from './ExpandableRow';
 
 const initialLead = {
   customer_name: '',
@@ -27,6 +28,7 @@ const useStyles = makeStyles((theme) => ({
   header: {},
   headerCell: {
     textTransform: 'capitalize',
+    fontWeight: 'bold',
   },
   typography: {
     padding: theme.spacing(2),
@@ -39,14 +41,13 @@ const useStyles = makeStyles((theme) => ({
 function Leads() {
   const classes = useStyles();
   const [checkedItems, setChecked] = useState([]);
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [activeRow, setActiveRow] = useState(null);
   const [activeLead, setActiveLead] = useState(initialLead);
   const [isModalOpen, toggleModal] = useState(false);
+  const [isNotesEnabled, toggleNotes] = useState(false);
   const { data: leadsData, pagination } = useSelector((state) => state.leads);
+  const currentAuth = useSelector((state) => state.auth);
 
   const statuses = useSelector((state) => state.statuses);
-  const statusList = statuses.map((status) => status.name);
   const itemIds = leadsData.map((item) => item._id);
 
   const dispatch = useDispatch();
@@ -71,19 +72,6 @@ function Leads() {
     }
   };
 
-  const formatStatusField = (status) => status && status.split('_').join(' ');
-
-  const handleClick = (event, id) => {
-    setAnchorEl(event.currentTarget);
-    setActiveRow(id);
-  };
-
-  const handleClose = (event) => {
-    event.stopPropagation();
-    setAnchorEl(null);
-    setActiveRow(null);
-  };
-
   const handleDelete = () => {
     dispatch(LeadsActions.deleteLeads(checkedItems));
   };
@@ -96,19 +84,24 @@ function Leads() {
     }
   };
 
-  const onLeadClick = (lead) => {
+  const onEditLead = (lead, showNotes) => {
     toggleModal(true);
+    if(showNotes){
+      toggleNotes(true);
+    }
     setActiveLead(lead);
   };
 
   const handleModalToggle = () => {
     toggleModal(!isModalOpen);
+    toggleNotes(false);
     setActiveLead(initialLead);
   };
 
   // https://github.com/gregnb/mui-datatables
   // For filter design
 
+  // 
   return (
     <div>
       <ReactHelmet title="Dashboard" meta="Discover your leads" />
@@ -140,79 +133,45 @@ function Leads() {
       </div>
       <Paper sx={{ width: '100%', mb: 2 }}>
         <TableToolBar tableHeading="Leads" numSelected={checkedItems.length} onDeleteClick={handleDelete} />
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell component="th" className={classes.headerCell}>
-                <Checkbox
-                  color="primary"
-                  size="small"
-                  onClick={handleToggle}
-                  checked={checkedItems.length === itemIds.length}
-                />
-              </TableCell>
-              <TableCell color="primary" className={classes.headerCell}>
-                Name
-              </TableCell>
-              <TableCell className={classes.headerCell}>Contact</TableCell>
-              <TableCell className={classes.headerCell}>Venture</TableCell>
-              <TableCell className={classes.headerCell}>Status</TableCell>
-              <TableCell className={classes.headerCell}>Assigned to</TableCell>
-              <TableCell className={classes.headerCell}>Follow up</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {leadsData.map((row, index) => (
-              <TableRow
-                key={index}
-                onClick={() => {
-                  onLeadClick(row);
-                }}
-              >
-                <TableCell component="th" scope="row">
+        <div style={{minHeight: 500, marginBottom: 20}}>
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell component="th" className={classes.headerCell}>
                   <Checkbox
-                    key={row._id}
-                    checked={checkedItems.includes(row._id)}
                     color="primary"
                     size="small"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleRowCheck(row._id);
-                    }}
+                    onClick={handleToggle}
+                    checked={checkedItems.length === itemIds.length}
                   />
                 </TableCell>
-                <TableCell component="th">{row.customer_name}</TableCell>
-                <TableCell>{row.contact}</TableCell>
-                <TableCell>{row.venture ? `${row.venture.name}, ${row.flat_no}` : ''}</TableCell>
-                <TableCell>
-                  <Chip
-                    label={formatStatusField(row.status)}
-                    classes={{ root: 'chip' }}
-                    className={row.status}
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      handleClick(event, row._id);
-                    }}
-                    selectprops={{
-                      native: true,
-                    }}
-                  />
+                <TableCell color="primary" className={classes.headerCell}>
+                  Name
                 </TableCell>
-                <TableCell>{row.employee_assigned ? row.employee_assigned.name : ''}</TableCell>
-                <TableCell>{row.followup_required ? `${row.followup_required}` : ''}</TableCell>
-                {activeRow === row._id && (
-                  <PopOver
-                    formatStatusField={formatStatusField}
-                    statusList={statusList}
-                    anchorEl={anchorEl}
-                    onClose={handleClose}
-                    activeStatus={row.status}
-                  />
-                )}
+                <TableCell className={classes.headerCell}>Phone</TableCell>
+                <TableCell className={classes.headerCell}>Email</TableCell>
+                <TableCell className={classes.headerCell}>Venture</TableCell>
+                <TableCell className={classes.headerCell}>Flat No</TableCell>
+                <TableCell className={classes.headerCell}>Assigned to</TableCell>
+                <TableCell className={classes.headerCell}>Status</TableCell>
+                <TableCell className={classes.headerCell}>Actions</TableCell>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHead>
+            
+            <TableBody>
+              {leadsData.length && leadsData.map((lead) => (
+                <ExpandableRow 
+                  onEdit={onEditLead}
+                  lead={lead}
+                  checkedItems={checkedItems} 
+                  handleRowCheck= {handleRowCheck} 
+                  statuses={statuses}
+                  key={lead._id}
+                />
+              ))}
+            </TableBody>
+          </Table>
+        </div>
         <Pagination
           count={pagination.total}
           variant="outlined"
@@ -227,6 +186,8 @@ function Leads() {
           toggleModal={handleModalToggle}
           isEdit={activeLead.customer_name !== ''}
           activeLead={activeLead}
+          isNotesEnabled={isNotesEnabled}
+          currentUser={currentAuth.user.displayName}
         />
       )}
     </div>
